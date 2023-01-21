@@ -7,7 +7,7 @@ interface TextModel{
 
 const Text: React.FC<TextModel> = ({children, className}) => {
   return (
-    <p className={`${className}`}>{children}</p>
+    <p className={`${className} font-semibold`}>{children}</p>
   )
 }
 

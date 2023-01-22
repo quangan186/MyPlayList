@@ -1,11 +1,14 @@
 import React from 'react'
 
-const ProgressBar: React.FC = () => {
-  return (
-    <div className='relative w-[200px] h-[4px] bg-gray-300'>
-        <div className='w-[200px] h-full bg-blue-500'>
+interface ProgressBarModel{
+    progressBarRef: any,
+    onChangeCurrentTime: any,
+}
 
-        </div>
+const ProgressBar: React.FC<ProgressBarModel> = ({progressBarRef, onChangeCurrentTime}) => {
+  return (
+    <div className='relative'>
+        <input type='range' defaultValue='0'ref={progressBarRef} onChange={onChangeCurrentTime} />
     </div>
   )
 }

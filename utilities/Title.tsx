@@ -7,7 +7,7 @@ interface TitleModel{
 
 const Title: React.FC<TitleModel> = ({children, className}) => {
   return (
-    <h1 className={`${className} font-bold`}>{children}</h1>
+    <h1 className={`${className}`}>{children}</h1>
   )
 }
 

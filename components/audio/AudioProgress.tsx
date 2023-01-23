@@ -12,12 +12,12 @@ interface AudioRangeModel{
 
 const AudioRange: React.FC<AudioRangeModel> = ({className, start, end, progressBarRef, onChangeCurrentTime}) => {
   return (
-    <div className={`${className} flex items-center w-full`}>
-        <Text className='w-full'>{start}</Text>
+    <div className={`${className} flex items-center gap-4 w-full`}>
+        <Text className=''>{start}</Text>
         {/* <input type='range' className='w-full progressBar' /> */}
         <ProgressBar onChangeCurrentTime={onChangeCurrentTime} progressBarRef={progressBarRef}/>
         {/* <input type="range" defaultValue="0" /> */}
-        <Text className='w-full text-right'>{end}</Text>
+        <Text className='text-right'>{end}</Text>
     </div>
   )
 }

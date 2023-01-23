@@ -11,7 +11,6 @@ const Background:React.FC<BackgroundModel> = ({src, alt}) => {
   return (
     <div className='w-full h-screen relative'>
         <Image src={src} alt={alt} className={"w-full h-full object-cover"} />
-        <MusicBoxContainer />
     </div>
   )
 }

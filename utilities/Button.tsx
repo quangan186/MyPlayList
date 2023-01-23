@@ -8,9 +8,7 @@ interface ButtonModel{
 
 const Button: React.FC<ButtonModel> = ({children, className, onClick}) => {
   return (
-    <div>
-        <button onClick={onClick} className={`${className}`} >{children}</button>
-    </div>
+    <button onClick={onClick} className={`${className}`} >{children}</button>  
   )
 }
 

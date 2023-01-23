@@ -53,7 +53,7 @@ const MusicBoxContainer:React.FC = () => {
   }, [audioRef?.current?.loadedmetadata, audioRef?.current?.readyState])
 
   return (
-    <div className='bg-white absolute top-1/2 left-1/2 flex justify-center flex-col items-center -translate-x-1/2 -translate-y-1/2 z-50 px-12 py-8'>
+    <div className='w-full bg-white px-12 py-8'>
       <audio ref={audioRef} src="./audio.mp3" preload="metadata" ></audio>
       <MusicInfo banner={banner} title='Gira Gira' singer='Ado' />
       <AudioRange onChangeCurrentTime={onChangeCurrentTime} progressBarRef={progressBarRef} start={calcTime(currentTime)} end={calcTime(duration)} className='py-4' />

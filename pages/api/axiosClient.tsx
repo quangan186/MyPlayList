@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-	baseURL: "/api",
 	headers: {
-		"Content-Type": "application/json",
+		'X-RapidAPI-Key': 'f67a6ec0ffmsh5fbe2152f4cb7f7p1151adjsnc93ad2e77038',
+    	'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
 	},
 });
 

@@ -4,7 +4,12 @@ import AudioButtonBar from './AudioButtonBar'
 import banner from '@/assets/img/banner.jpg'
 import AudioRange from './AudioProgress'
 
-const MusicBoxContainer:React.FC = () => {
+interface MusicBoxModel{
+  audioLink: string,
+  // title: string,
+  // singer: string
+}
+const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink}) => {
   const [togglePlayButton, setTogglePlayButton] = useState<boolean>(false);
   
   const audioRef = useRef<any>();
@@ -54,7 +59,7 @@ const MusicBoxContainer:React.FC = () => {
 
   return (
     <div className='w-full bg-white px-12 py-8'>
-      <audio ref={audioRef} src="./audio.mp3" preload="metadata" ></audio>
+      <audio ref={audioRef} src={audioLink} preload="metadata" ></audio>
       <MusicInfo banner={banner} title='Gira Gira' singer='Ado' />
       <AudioRange onChangeCurrentTime={onChangeCurrentTime} progressBarRef={progressBarRef} start={calcTime(currentTime)} end={calcTime(duration)} className='py-4' />
       <AudioButtonBar togglePlayButton={togglePlayButton} playFunc={() => handleOnClickPlayButton()}/>

@@ -1,14 +1,15 @@
 import React from 'react'
 
 interface ButtonModel{
+    type?: any,
     children: any,
     className?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
 }
 
-const Button: React.FC<ButtonModel> = ({children, className, onClick}) => {
+const Button: React.FC<ButtonModel> = ({type, children, className, onClick}) => {
   return (
-    <button onClick={onClick} className={`${className}`} >{children}</button>  
+    <button type={type} onClick={onClick} className={`${className}`} >{children}</button>  
   )
 }
 

@@ -1,23 +1,20 @@
-import React from 'react'
+import React, { ChangeEventHandler } from 'react'
 import SearchBar from './SearchBar'
 import SearchResult from './SearchResult'
 import defaultImg from '@/assets/img/defaultMusic.jpeg'
 
-const SearchContainer: React.FC = ({}) => {
+interface SearchBarModel{
+  searchResult?: any
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  onChange?: ChangeEventHandler<HTMLInputElement>
+}
+
+const SearchContainer: React.FC<SearchBarModel> = ({searchResult , onClick, onChange}) => {
   return (
     <div className='w-full flex flex-col '>
-        <SearchBar />
+        <SearchBar onClick={onClick} onChange={onChange}  />
         <div className='bg-black w-full h-full opacity-70 overflow-y-scroll flex flex-col gap-4 py-4 px-4'>
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
-            <SearchResult banner={defaultImg} songName='Gira gira' singer='Ado' />
+            {searchResult && <SearchResult banner={defaultImg} songName={searchResult.title} />}
         </div>
     </div>
   )

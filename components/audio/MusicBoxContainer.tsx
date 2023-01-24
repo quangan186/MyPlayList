@@ -59,9 +59,9 @@ const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink, title, songBanner
   }, [audioRef?.current?.loadedmetadata, audioRef?.current?.readyState])
 
   return (
-    <div className='w-full bg-white px-12 py-8'>
+    <div className='w-full bg-white px-12 py-8 relative flex flex-col'>
       <audio ref={audioRef} src={audioLink} preload="metadata" ></audio>
-      <MusicInfo banner={songBanner} title={title} singer={singer}/>
+      <MusicInfo className='h-full' banner={songBanner} title={title} singer={singer}/>
       <AudioRange onChangeCurrentTime={onChangeCurrentTime} progressBarRef={progressBarRef} start={calcTime(currentTime)} end={calcTime(duration)} className='py-4' />
       <AudioButtonBar togglePlayButton={togglePlayButton} playFunc={() => handleOnClickPlayButton()}/>
     </div>

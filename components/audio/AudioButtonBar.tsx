@@ -15,7 +15,7 @@ interface AudioButtonModel{
 
 const AudioButtonBar: React.FC<AudioButtonModel> = ({prevFunc, playFunc, nextFunc, togglePlayButton}) => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-end">
       <div className="flex gap-4 items-center">
         <Button className="" onClick={prevFunc}>
           <Image

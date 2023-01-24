@@ -12,7 +12,7 @@ interface SearchResultModel{
 
 const SearchResult: React.FC<SearchResultModel> = ({banner, songName, onClick}) => {
   return (
-    <div className='flex gap-4 cursor-pointer hover:opacity-70 h-[60px]' onClick={onClick}>
+    <div className='flex gap-4 cursor-pointer hover:opacity-70 h-[40px] items-center' onClick={onClick}>
         <img src={banner} alt="" className='max-w-[60px] max-h-[60px]' />
         <div className='w-full'>
             <Title className='text-white'>{songName}</Title>

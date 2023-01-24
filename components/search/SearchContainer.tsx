@@ -1,20 +1,20 @@
 import React, { ChangeEventHandler } from 'react'
 import SearchBar from './SearchBar'
 import SearchResult from './SearchResult'
-import defaultImg from '@/assets/img/defaultMusic.jpeg'
 
 interface SearchBarModel{
   searchResult?: any
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  onSearchClick?: React.MouseEventHandler<HTMLButtonElement>
   onChange?: ChangeEventHandler<HTMLInputElement>
+  onSongClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
-const SearchContainer: React.FC<SearchBarModel> = ({searchResult , onClick, onChange}) => {
+const SearchContainer: React.FC<SearchBarModel> = ({searchResult , onSearchClick, onSongClick, onChange}) => {
   return (
     <div className='w-full flex flex-col '>
-        <SearchBar onClick={onClick} onChange={onChange}  />
-        <div className='bg-black w-full h-full opacity-70 overflow-y-scroll flex flex-col gap-4 py-4 px-4'>
-            {searchResult && <SearchResult banner={defaultImg} songName={searchResult.title} />}
+        <SearchBar onClick={onSearchClick} onChange={onChange}  />
+        <div className={`bg-black w-full h-full opacity-70 flex flex-col gap-4 py-4 px-4 ${!searchResult ? "invisible" : ""}`}>
+            {searchResult && <SearchResult banner={searchResult.thumbnails.high.url} songName={searchResult.title} onClick={onSongClick}/>}
         </div>
     </div>
   )

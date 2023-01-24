@@ -6,8 +6,9 @@ import AudioRange from './AudioProgress'
 
 interface MusicBoxModel{
   audioLink: string,
-  // title: string,
-  // singer: string
+  banner?: any,
+  title?: string,
+  singer?: string
 }
 const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink}) => {
   const [togglePlayButton, setTogglePlayButton] = useState<boolean>(false);

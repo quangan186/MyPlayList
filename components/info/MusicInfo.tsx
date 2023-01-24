@@ -32,7 +32,7 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
           className="md:w-[280px] md:h-[280px] mx-auto rounded-full"
         />
       )}
-      <Title className="text-[16px] py-2 font-bold">{title}</Title>
+      <Title className="text-[16px] py-4 font-bold">{title}</Title>
       <Text className="text-black text-[14px]">{singer}</Text>
     </div>
   );

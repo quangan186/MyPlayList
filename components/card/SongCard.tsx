@@ -1,22 +1,34 @@
-import Title from '@/utilities/Title'
-import Image from 'next/image'
-import React from 'react'
+import Button from "@/utilities/Button";
+import Title from "@/utilities/Title";
+import Image from "next/image";
+import React from "react";
+import remove from "@/assets/svg/remove.svg";
 
-interface SearchResultModel{
-    banner?: any,
-    songName: string,
-    onClick?: React.MouseEventHandler<HTMLDivElement>
+interface SearchResultModel {
+  banner?: any;
+  songName: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const SongCard: React.FC<SearchResultModel> = ({banner, songName, onClick}) => {
+const SongCard: React.FC<SearchResultModel> = ({
+  banner,
+  songName,
+  onClick,
+}) => {
   return (
-    <div className='flex gap-4 cursor-pointer hover:opacity-70 h-[60px]' onClick={onClick}>
-        <Image src={banner} alt="" className='max-w-[60px] max-h-[60px]' />
-        <div className='w-full'>
-            <Title className='text-white'>{songName}</Title>
+    <div className="flex gap-4 cursor-pointer h-[60px] relative">
+      <div onClick={onClick} className='flex items-center gap-4 hover:opacity-70 w-full'>
+        <Image src={banner} alt="" className="max-w-[60px] max-h-[60px]" />
+        <div className="w-full">
+          <Title className="text-white">{songName}</Title>
         </div>
-    </div>
-  )
-}
+      </div>
 
-export default SongCard
+      <Button className="hover:opacity-70">
+        <Image src={remove} alt="" className="max-h-[40px] max-w-[40px]" />
+      </Button>
+    </div>
+  );
+};
+
+export default SongCard;

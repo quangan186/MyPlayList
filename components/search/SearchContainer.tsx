@@ -14,7 +14,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({searchResult , onSearchClick
     <div className='w-full flex flex-col '>
         <SearchBar onClick={onSearchClick} onChange={onChange}  />
         <div className={`bg-black w-full h-full opacity-70 flex flex-col gap-4 py-4 px-4 ${!searchResult ? "invisible" : ""}`}>
-            {searchResult && <SearchResult banner={searchResult.thumbnails.high.url} songName={searchResult.title} onClick={onSongClick}/>}
+            {searchResult && <SearchResult banner={searchResult.snippet.thumbnails.high.url} songName={searchResult.snippet.title} onClick={onSongClick}/>}
         </div>
     </div>
   )

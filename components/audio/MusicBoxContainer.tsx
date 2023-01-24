@@ -6,11 +6,11 @@ import AudioRange from './AudioProgress'
 
 interface MusicBoxModel{
   audioLink: string,
-  banner?: any,
-  title?: string,
-  singer?: string
+  songBanner: string,
+  title: string,
+  singer: string
 }
-const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink}) => {
+const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink, title, songBanner, singer}) => {
   const [togglePlayButton, setTogglePlayButton] = useState<boolean>(false);
   
   const audioRef = useRef<any>();
@@ -61,7 +61,7 @@ const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink}) => {
   return (
     <div className='w-full bg-white px-12 py-8'>
       <audio ref={audioRef} src={audioLink} preload="metadata" ></audio>
-      <MusicInfo banner={banner} title='Gira Gira' singer='Ado' />
+      <MusicInfo banner={songBanner} title={title} singer={singer}/>
       <AudioRange onChangeCurrentTime={onChangeCurrentTime} progressBarRef={progressBarRef} start={calcTime(currentTime)} end={calcTime(duration)} className='py-4' />
       <AudioButtonBar togglePlayButton={togglePlayButton} playFunc={() => handleOnClickPlayButton()}/>
     </div>

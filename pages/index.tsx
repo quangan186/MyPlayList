@@ -18,8 +18,14 @@ export default function Home() {
   const [songTitle, setSongTitle] = useState<string>("")
   const [channel, setChannel] = useState<string>("")
 
+  const [songs, setSongs] = useState<any[]>([])
+
   const onChangeLinkYoutube = (e: any) => {
     setYoutubeLink(e.target.value)
+  }
+
+  const onAddSongClick = () => {
+    setSongs((prevSong: any) => [...prevSong, searchResult]) 
   }
 
   const searchVideoMp3 = () => {
@@ -65,10 +71,10 @@ export default function Home() {
     <div className='relative h-screen w-full'>
       <Background src={background} alt={""} />
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20'>
-        <SearchContainer onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} onSongClick={() => playAudio()} />
+        <SearchContainer onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} onSongClick={() => playAudio()} onAddClick={() => onAddSongClick()} />
         <div className='flex gap-8 justify-center max-h-[520px]'>
           <MusicBoxContainer audioLink={currentAudioLink} songBanner={songImage} title={songTitle} singer={channel}/>
-          <PlayList banner={defaultImg} />
+          <PlayList songs={songs} setSongs={setSongs}/>
           {/* <a href="https://mgamma.123tokyo.xyz/get.php/3/5c/sOiMD45QGLs.mp3?cid=MmEwMTo0Zjg6YzAxMDo5ZmE2OjoxfE5BfERF&h=7UmrErXqb7byl1A9CjRz0Q&s=1674502559&n=%E3%80%90Ado%E3%80%91%E3%82%AE%E3%83%A9%E3%82%AE%E3%83%A9" target="_blank" rel='noreferrer' className='inline-block p-4 rounded-lg cursor-pointer my-4 hover:opacity-70 duration-300 bg-gradient-to-r from-primary-100 to-secondary text-black hover:-translate-y-2' download="An CV">Download PDF</a> */}
         </div>
       </div>

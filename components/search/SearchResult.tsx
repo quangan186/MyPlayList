@@ -9,26 +9,27 @@ interface SearchResultModel {
   banner?: any;
   songName: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onAddClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const SearchResult: React.FC<SearchResultModel> = ({
   banner,
   songName,
   onClick,
+  onAddClick
 }) => {
   return (
     <div
       className="flex gap-4 cursor-pointer h-[40px] items-center"
-      onClick={onClick}
     >
-      <div className="hover:opacity-70 flex items-center w-full">
+      <div className="hover:opacity-70 gap-4 flex items-center w-full" onClick={onClick}>
         <img src={banner} alt="" className="max-w-[60px] max-h-[60px]" />
         <div className="w-full">
           <Title className="text-white">{songName}</Title>
         </div>
       </div>
-
-      <Button className="hover:opacity-70">
+      
+      <Button className="hover:opacity-70" onClick={onAddClick}>
         <Image src={add} alt="" className="max-h-[40px] max-w-[40px]" />
       </Button>
     </div>

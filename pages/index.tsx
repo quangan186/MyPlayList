@@ -18,14 +18,12 @@ export default function Home() {
   const [songTitle, setSongTitle] = useState<string>("")
   const [channel, setChannel] = useState<string>("")
 
+  const [searchAudioLink, setSearchLinkAudio] = useState<string>("")
+
   const [songs, setSongs] = useState<any[]>([])
 
   const onChangeLinkYoutube = (e: any) => {
     setYoutubeLink(e.target.value)
-  }
-
-  const onAddSongClick = () => {
-    setSongs((prevSong: any) => [...prevSong, searchResult]) 
   }
 
   const searchVideoMp3 = () => {
@@ -40,14 +38,30 @@ export default function Home() {
         // console.log(res)
       })   
     }
+
+    const  getMp3Link = async() =>{
+      const fetchApi = await fetch(`https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get("v")}`, {
+        headers: {
+          'X-RapidAPI-Key': 'f67a6ec0ffmsh5fbe2152f4cb7f7p1151adjsnc93ad2e77038',
+          'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+        }
+      })
+      
+      fetchApi.json().then(res => {
+        // setSearchResult(res)
+        setSearchLinkAudio(res.link)
+        console.log(res.link)
+      })   
+    }
     getVideoInformation()
+    getMp3Link()
   }
 
   return (
     <div className='relative h-screen w-full'>
       <Background src={background} alt={""} />
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20'>
-        <SearchContainer onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} onAddClick={() => onAddSongClick()}setCurrentAudioLink={setCurrentAudioLink} setChannel={setChannel} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
+        <SearchContainer setSongs={setSongs} searchAudioLink={searchAudioLink} onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} setCurrentAudioLink={setCurrentAudioLink} setChannel={setChannel} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
         <div className='flex gap-8 justify-center max-h-[520px]'>
           <MusicBoxContainer audioLink={currentAudioLink} songBanner={songImage} title={songTitle} singer={channel}/>
           <PlayList songs={songs} setSongs={setSongs} setCurrentAudioLink={setCurrentAudioLink} setChannel={setChannel} setSongImage={setSongImage} setSongTitle={setSongTitle}/>

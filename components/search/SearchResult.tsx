@@ -20,7 +20,7 @@ const SearchResult: React.FC<SearchResultModel> = ({
 }) => {
   return (
     <div
-      className="flex gap-4 cursor-pointer h-[40px] items-center"
+      className="flex gap-4 cursor-pointer h-full items-center"
     >
       <div className="hover:opacity-70 gap-4 flex items-center w-full" onClick={onClick}>
         <img src={banner} alt="" className="max-w-[60px] max-h-[60px]" />

@@ -21,8 +21,13 @@ const MusicBoxContainer:React.FC<MusicBoxModel> = ({audioLink, title, songBanner
   const [duration, setDuration] = useState<number>(0);
 
   const handleOnClickPlayButton = () => {
-    const prevValue = togglePlayButton;
     setTogglePlayButton(state => !state)
+    if (currentTime == duration) {
+      setTogglePlayButton(false)
+    }
+
+    const prevValue = togglePlayButton;
+
     if (!prevValue){
       audioRef.current.play();
       animationRef.current = requestAnimationFrame(whilePlaying);

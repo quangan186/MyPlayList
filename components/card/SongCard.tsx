@@ -18,15 +18,15 @@ const SongCard: React.FC<SearchResultModel> = ({
   onDeleteClick
 }) => {
   return (
-    <div className="flex gap-4 cursor-pointer h-[60px] relative">
-      <div onClick={onClick} className='flex items-center gap-4 hover:opacity-70 w-full'>
+    <div className="flex cursor-pointer h-[60px] relative">
+      <div onClick={onClick} className='flex items-center hover:opacity-70 w-full'>
         <img src={banner} alt="" className="max-w-[60px] max-h-[60px]" />
-        <div className="w-full">
-          <Title className="text-white">{songName}</Title>
+        <div className="w-full pl-4 pr-10">
+          <Title className="text-white break-words">{songName}</Title>
         </div>
       </div>
 
-      <Button className="hover:opacity-70" onClick={onDeleteClick}>
+      <Button className="hover:opacity-70 absolute top-1/2 right-0 -translate-y-1/2" onClick={onDeleteClick}>
         <Image src={remove} alt="" className="max-h-[40px] max-w-[40px]" />
       </Button>
     </div>

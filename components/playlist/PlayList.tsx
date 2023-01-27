@@ -24,15 +24,15 @@ const PlayList: React.FC<PlayListModel> = ({songs,setSongs, setCurrentAudioLink,
       setSongTitle(song.searchResult.snippet.title)
   }
   return (
-    <div className='bg-black w-full px-4 overflow-y-scroll  relative'>
-        <Title className='text-white text-xl tracking-wider py-4 z-50 bg-black sticky top-0'>
+    <div className='bg-black w-full overflow-y-scroll  relative'>
+        <Title className='text-white border-b border-b-gray-300 text-xl tracking-wider p-4 z-50 bg-black sticky top-0'>
             My PlayList
         </Title>
 
-        <div className='flex flex-col gap-8 py-4'>
+        <div className='flex flex-col gap-8 p-4'>
           {songs.map((song: any) => {
             return (
-              <SongCard banner={song.searchResult.snippet.thumbnails.high.url} songName={song.searchResult.snippet.title} onClick={() => playAudio(song)} onDeleteClick={() => onDeleteSongClick(song.searchResult.id)} />
+              <SongCard banner={song.searchResult.snippet.thumbnails.high.url} songName={song.searchResult.snippet.title} onClick={() => playAudio(song)} onDeleteClick={() => onDeleteSongClick(song.searchResult.id)} key={song.searchResult.id} />
             )
           })}
           {/* <SongCard banner={banner} songName="Gira gira" />

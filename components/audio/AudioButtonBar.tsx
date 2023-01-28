@@ -5,6 +5,8 @@ import play from "@/assets/svg/play.svg";
 import next from "@/assets/svg/next.svg";
 import previous from "@/assets/svg/previous.svg";
 import pause from '@/assets/svg/pause.svg'
+import VolumeBar from "./VolumeBar";
+import RandomLoopButton from "./RandomLoopButton";
 
 interface AudioButtonModel{
   prevFunc?: React.MouseEventHandler<HTMLButtonElement>,
@@ -15,8 +17,9 @@ interface AudioButtonModel{
 
 const AudioButtonBar: React.FC<AudioButtonModel> = ({prevFunc, playFunc, nextFunc, togglePlayButton}) => {
   return (
-    <div className="flex justify-center items-end">
-      <div className="flex gap-4 items-center">
+    <div className="flex justify-between items-center">
+      <RandomLoopButton />
+      <div className="flex w-full justify-center gap-4 items-center">
         <Button className="" onClick={prevFunc}>
           <Image
             src={previous}
@@ -33,6 +36,7 @@ const AudioButtonBar: React.FC<AudioButtonModel> = ({prevFunc, playFunc, nextFun
           <Image src={next} alt="next" className={`w-[20px] h-[20px]`} />
         </Button>
       </div>
+      <VolumeBar />
     </div>
   );
 };

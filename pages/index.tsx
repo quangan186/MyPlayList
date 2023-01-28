@@ -4,7 +4,6 @@ import MusicBoxContainer from '@/components/audio/MusicBoxContainer'
 import SearchContainer from '@/components/search/SearchContainer'
 import { useEffect, useRef, useState } from 'react'
 import PlayList from '@/components/playlist/PlayList'
-// import {youtubeMp3Converter} from 'youtube-mp3-converter';
 
 // https://www.youtube.com/watch?v=Ws-QlpSltr8&ab_channel=ĐenVâuOfficial
 export default function Home() {  
@@ -22,18 +21,10 @@ export default function Home() {
   
   const [songImage, setSongImage] = useState<string>("")
   const [songTitle, setSongTitle] = useState<string>("")
-  const [channel, setChannel] = useState<string>("")
 
   const [searchAudioLink, setSearchLinkAudio] = useState<string>("")
 
   const [songs, setSongs] = useState<any[]>([])
-
-  useEffect(() => {
-    if (currentTime == duration) {
-      handleOnClickPlayButton()
-      timeTravel(0)
-    }
-  }, [currentTime])
 
   const timeTravel = (newTime: number) => {
     progressBarRef.current.value = newTime;
@@ -60,12 +51,6 @@ export default function Home() {
     return `${returnedMinutes}:${returnedSeconds}`;
   }
 
-  useEffect(() => {
-    const seconds = Math.floor(audioRef.current.duration);
-    setDuration(seconds)
-    progressBarRef.current.max = seconds
-  }, [audioRef?.current?.loadedmetadata, audioRef?.current?.readyState])
-
   const handleOnClickPlayButton = () => {  
     const prevValue = togglePlayButton;
     setTogglePlayButton(state => !state)
@@ -78,7 +63,7 @@ export default function Home() {
       cancelAnimationFrame(animationRef.current)
     }
   }
-
+  
   const onChangeLinkYoutube = (e: any) => {
     setYoutubeLink(e.target.value)
   }
@@ -110,16 +95,42 @@ export default function Home() {
     getVideoInformation()
     getMp3Link()
   }
+  
+  // useEffect(() => {
+  //   const seconds = Math.floor(audioRef.current.duration);
+  //   setDuration(seconds)
+  //   progressBarRef.current.max = seconds
+  // }, [audioRef?.current?.loadedmetadata, audioRef?.current?.readyState])
+
+  useEffect(() => {
+    if (currentAudioLink){
+      setTogglePlayButton(true)
+      audioRef.current.play()
+      const seconds = Math.floor(audioRef.current.duration);
+      setDuration(seconds)
+      progressBarRef.current.max = seconds
+    } else{
+      setTogglePlayButton(false)
+      audioRef.current.pause()
+    }
+  }, [currentAudioLink])
+
+  useEffect(() => {
+    if (currentTime == duration) {
+      setTogglePlayButton(false)
+      audioRef.current.pause()
+      timeTravel(0)
+    }
+  }, [currentTime, duration])
 
   return (
     <div className='relative h-screen w-full'>
       <Background src={background} alt={""} />
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20'>
-        <SearchContainer handleOnClickPlayButton={() => handleOnClickPlayButton()} setSongs={setSongs} searchAudioLink={searchAudioLink} onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} setCurrentAudioLink={setCurrentAudioLink} setChannel={setChannel} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
-        <div className='flex gap-8 justify-center max-h-[520px]'>
-          <MusicBoxContainer handleOnClickPlayButton={() => handleOnClickPlayButton()} onChangeCurrentTime={onChangeCurrentTime} start={calcTime(currentTime)} end={calcTime(duration)} togglePlayButton={togglePlayButton} progressBarRef={progressBarRef}  audioRef={audioRef} audioLink={currentAudioLink} songBanner={songImage} title={songTitle} singer={channel}/>
-          <PlayList songs={songs} setSongs={setSongs} setCurrentAudioLink={setCurrentAudioLink} setChannel={setChannel} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
-          {/* <a href="https://mgamma.123tokyo.xyz/get.php/3/5c/sOiMD45QGLs.mp3?cid=MmEwMTo0Zjg6YzAxMDo5ZmE2OjoxfE5BfERF&h=7UmrErXqb7byl1A9CjRz0Q&s=1674502559&n=%E3%80%90Ado%E3%80%91%E3%82%AE%E3%83%A9%E3%82%AE%E3%83%A9" target="_blank" rel='noreferrer' className='inline-block p-4 rounded-lg cursor-pointer my-4 hover:opacity-70 duration-300 bg-gradient-to-r from-primary-100 to-secondary text-black hover:-translate-y-2' download="An CV">Download PDF</a> */}
+        <SearchContainer setDuration={setDuration} audioRef={audioRef} setCurrentTime={setCurrentTime} progressBarRef={progressBarRef} handleOnClickPlayButton={() => handleOnClickPlayButton()} setSongs={setSongs} searchAudioLink={searchAudioLink} onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} setCurrentAudioLink={setCurrentAudioLink} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
+        <div className='flex gap-8 justify-center h-[500px]'>
+          <MusicBoxContainer handleOnClickPlayButton={() => handleOnClickPlayButton()} onChangeCurrentTime={onChangeCurrentTime} start={calcTime(currentTime)} end={calcTime(duration)} togglePlayButton={togglePlayButton} progressBarRef={progressBarRef}  audioRef={audioRef} audioLink={currentAudioLink} songBanner={songImage} title={songTitle} />
+          <PlayList songs={songs} setSongs={setSongs} setCurrentAudioLink={setCurrentAudioLink}  setSongImage={setSongImage} setSongTitle={setSongTitle}/>
         </div>
       </div>
     </div>

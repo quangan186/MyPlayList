@@ -7,24 +7,22 @@ interface PlayListModel{
   setSongs: any
   // onSelectSongClick: React.MouseEventHandler<HTMLDivElement>
   setCurrentAudioLink: any
-  setChannel: any
   setSongImage: any
   setSongTitle: any
 }
 
-const PlayList: React.FC<PlayListModel> = ({songs,setSongs, setCurrentAudioLink, setChannel, setSongImage,setSongTitle}) => {
+const PlayList: React.FC<PlayListModel> = ({songs,setSongs, setCurrentAudioLink, setSongImage,setSongTitle}) => {
   const onDeleteSongClick = (id: string) => {
     setSongs(songs.filter(song => id !== song.searchResult.id))
   }
 
   const playAudio = (song: any) => {
       setCurrentAudioLink(song.audioLink)
-      setChannel(song.searchResult.snippet.channelTitle)
       setSongImage(song.searchResult.snippet.thumbnails.high.url)
       setSongTitle(song.searchResult.snippet.title)
   }
   return (
-    <div className='bg-black w-full overflow-y-scroll  relative'>
+    <div className='bg-black w-full overflow-y-scroll'>
         <Title className='text-white border-b border-b-gray-300 text-xl tracking-wider p-4 z-50 bg-black sticky top-0'>
             My PlayList
         </Title>

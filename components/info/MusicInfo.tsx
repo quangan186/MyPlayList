@@ -8,32 +8,32 @@ interface MusicInfoModel {
   className?: string;
   banner: string;
   title: string;
-  singer: string;
 }
 
 const MusicInfo: React.FC<MusicInfoModel> = ({
   className,
   banner,
   title,
-  singer,
 }) => {
   return (
-    <div className={`${className}`}>
-      {banner ? (
-        <img
-          src={banner}
-          alt=""
-          className="md:w-[280px] md:h-[280px] mx-auto rounded-full animate-spin-slow"
-        />
-      ) : (
-        <Image
-          src={defaultImg}
-          alt=""
-          className="md:w-[280px] md:h-[280px] mx-auto rounded-full"
-        />
-      )}
-      <Title className="text-[16px] py-4 font-bold">{title}</Title>
-      <Text className="text-black text-[14px]">{singer}</Text>
+    <div className={`${className} w-full h-full flex flex-col`}>
+      <div className="h-full">
+        {banner ? (
+          <img
+            src={banner}
+            alt=""
+            className="md:w-[280px] md:h-[280px] mx-auto rounded-full animate-spin-slow"
+          />
+        ) : (
+          <Image
+            src={defaultImg}
+            alt=""
+            className="md:w-[280px] md:h-[280px] mx-auto rounded-full"
+          />
+        )}
+      </div>
+      
+      <Title className="text-[16px] py-4 font-bold h-full flex items-center">{title}</Title>
     </div>
   );
 };

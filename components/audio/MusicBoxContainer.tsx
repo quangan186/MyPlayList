@@ -27,14 +27,18 @@ interface MusicBoxModel{
   position: any
   progressBarWidth: any
   marginLeft: any
+  volumeMute: boolean
+  handleMuteClick: any
+  setVolumeLevel: any
+  volumeLevel: number
 }
-const MusicBoxContainer:React.FC<MusicBoxModel> = ({rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
+const MusicBoxContainer:React.FC<MusicBoxModel> = ({volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
   return (
     <div className='w-full bg-white px-12 py-4 relative flex flex-col'>
-      <audio ref={audioRef} src={audioLink} preload="metadata" onLoadedData={(e) => setDuration(Math.floor(e.currentTarget.duration))} onTimeUpdate={getCurrentDuration} ></audio>
+      <audio ref={audioRef}  src={audioLink} preload="metadata" onLoadedData={(e) => setDuration(Math.floor(e.currentTarget.duration))} onTimeUpdate={getCurrentDuration} muted={volumeMute} ></audio>
       <MusicInfo className='h-full' banner={songBanner} title={title} />
       <AudioRange rangeRef={rangeRef} thumbRef={thumbRef} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} position={position} progressBarWidth={progressBarWidth} marginLeft={marginLeft} percentage={percentage} onChange={onChange} start={start} end={end} className='py-4' />
-      <AudioButtonBar togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
+      <AudioButtonBar volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
     </div>
   )
 }

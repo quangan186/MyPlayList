@@ -13,9 +13,13 @@ interface AudioButtonModel{
   playFunc?: React.MouseEventHandler<HTMLButtonElement>,
   nextFunc?: React.MouseEventHandler<HTMLButtonElement>,
   togglePlayButton: boolean
+  volumeMute: boolean
+  handleMuteClick: any
+  setVolumeLevel: any
+  volumeLevel: number
 }
 
-const AudioButtonBar: React.FC<AudioButtonModel> = ({prevFunc, playFunc, nextFunc, togglePlayButton}) => {
+const AudioButtonBar: React.FC<AudioButtonModel> = ({volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, prevFunc, playFunc, nextFunc, togglePlayButton}) => {
   return (
     <div className="flex justify-between items-center">
       <RandomLoopButton />
@@ -36,7 +40,8 @@ const AudioButtonBar: React.FC<AudioButtonModel> = ({prevFunc, playFunc, nextFun
           <Image src={next} alt="next" className={`w-[20px] h-[20px]`} />
         </Button>
       </div>
-      <VolumeBar />
+
+      <VolumeBar volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} />
     </div>
   );
 };

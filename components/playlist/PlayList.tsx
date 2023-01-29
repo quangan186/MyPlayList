@@ -9,14 +9,26 @@ interface PlayListModel{
   setCurrentAudioLink: any
   setSongImage: any
   setSongTitle: any
+  setPosition: any 
+  setMarginLeft: any 
+  setProgressBarWidth: any
+  setPercentage: any
+  setCurrentTime: any
+  setDuration: any
 }
 
-const PlayList: React.FC<PlayListModel> = ({songs,setSongs, setCurrentAudioLink, setSongImage,setSongTitle}) => {
+const PlayList: React.FC<PlayListModel> = ({setCurrentTime, setDuration, setPercentage, setPosition, setMarginLeft, setProgressBarWidth, songs,setSongs, setCurrentAudioLink, setSongImage,setSongTitle}) => {
   const onDeleteSongClick = (id: string) => {
     setSongs(songs.filter(song => id !== song.searchResult.id))
   }
 
   const playAudio = (song: any) => {
+      setCurrentTime(0)
+      setDuration(NaN)
+      setPosition(0)
+      setMarginLeft(0)
+      setProgressBarWidth(0)
+      setPercentage(0)
       setCurrentAudioLink(song.audioLink)
       setSongImage(song.searchResult.snippet.thumbnails.high.url)
       setSongTitle(song.searchResult.snippet.title)

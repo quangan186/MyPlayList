@@ -1,14 +1,55 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface ProgressBarModel{
-    progressBarRef: any,
-    onChangeCurrentTime: any,
+  // progressBarRef: any,
+  percentage: number
+  onChange: any
+  rangeRef: any 
+  thumbRef: any 
+  setPosition: any 
+  setMarginLeft: any 
+  setProgressBarWidth: any
+  position: any
+  progressBarWidth: any
+  marginLeft: any
 }
 
-const ProgressBar: React.FC<ProgressBarModel> = ({progressBarRef, onChangeCurrentTime}) => {
+const ProgressBar: React.FC<ProgressBarModel> = ({position, progressBarWidth, marginLeft, percentage, onChange, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth}) => {
+  useEffect(() => {
+    const rangeWidth = rangeRef.current.getBoundingClientRect().width
+    const thumbWidth = thumbRef.current.getBoundingClientRect().width
+    const centerThumb = (thumbWidth / 100) * percentage * -1
+    const centerProgressBar =
+      thumbWidth + (rangeWidth / 100) * percentage - (thumbWidth / 100) * percentage
+    setPosition(percentage)
+    setMarginLeft(centerThumb)
+    setProgressBarWidth(centerProgressBar)
+  }, [percentage, rangeRef, setMarginLeft, setPosition, setProgressBarWidth, thumbRef])
+
   return (
-    <div className='relative w-full flex items-center'>
-        <input className='w-full' type='range' defaultValue='0'ref={progressBarRef} onChange={onChangeCurrentTime} />
+    <div className='slider-container'>
+      <div
+        className='progress-bar-cover'
+        style={{
+          width: `${progressBarWidth}px`
+        }}
+      ></div>
+      <div
+        className='thumb'
+        ref={thumbRef}
+        style={{
+          left: `${position}%`,
+          marginLeft: `${marginLeft}px`
+        }}
+      ></div>
+      <input
+        type='range'
+        value={position}
+        ref={rangeRef}
+        // step='0.01'
+        className='range'
+        onChange={onChange}
+      />
     </div>
   )
 }

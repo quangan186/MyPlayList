@@ -6,41 +6,44 @@ import { useEffect, useRef, useState } from 'react'
 import PlayList from '@/components/playlist/PlayList'
 
 // https://www.youtube.com/watch?v=Ws-QlpSltr8&ab_channel=ĐenVâuOfficial
-export default function Home() {  
+export default function Home() {
   const audioRef = useRef<any>();
   const progressBarRef = useRef<any>();
-  const animationRef = useRef<any>();
 
   const [togglePlayButton, setTogglePlayButton] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(NaN);
 
   const [currentAudioLink, setCurrentAudioLink] = useState<string>("");
   const [youtubeLink, setYoutubeLink] = useState<string>("")
   const [searchResult, setSearchResult] = useState<any>()
-  
+
   const [songImage, setSongImage] = useState<string>("")
   const [songTitle, setSongTitle] = useState<string>("")
 
   const [searchAudioLink, setSearchLinkAudio] = useState<string>("")
 
   const [songs, setSongs] = useState<any[]>([])
+  const [percentage, setPercentage] = useState<number>(0)
 
-  const timeTravel = (newTime: number) => {
-    progressBarRef.current.value = newTime;
-    audioRef.current.currentTime = progressBarRef.current.value;
-    setCurrentTime(progressBarRef.current.value);
+  const [position, setPosition] = useState<number>(0)
+  const [marginLeft, setMarginLeft] = useState<number>(0)
+  const [progressBarWidth, setProgressBarWidth] = useState<number>(0)
+
+  const rangeRef = useRef<any>()
+  const thumbRef = useRef<any>()
+
+  const onChange = (e: any) => {
+    audioRef.current.currentTime = (audioRef.current.duration / 100) * e.target.value
+    setPercentage(e.target.value)
   }
 
-  const whilePlaying = () =>{
-    progressBarRef.current.value = audioRef.current.currentTime
-    setCurrentTime(progressBarRef.current.value)
-    animationRef.current = requestAnimationFrame(whilePlaying)
-  }
+  const getCurrentDuration = (e: any) => {
+    const percent = ((e.currentTarget.currentTime / e.currentTarget.duration) * 100).toFixed(2)
+    const time = e.currentTarget.currentTime
 
-  const onChangeCurrentTime = () =>{
-    audioRef.current.currentTime = progressBarRef.current.value;
-    setCurrentTime(progressBarRef.current.value)
+    setPercentage(+percent)
+    setCurrentTime(time)
   }
 
   const calcTime = (secs: number) => {
@@ -51,19 +54,17 @@ export default function Home() {
     return `${returnedMinutes}:${returnedSeconds}`;
   }
 
-  const handleOnClickPlayButton = () => {  
+  const handleOnClickPlayButton = () => {
     const prevValue = togglePlayButton;
     setTogglePlayButton(state => !state)
 
-    if (!prevValue && currentAudioLink){
+    if (!prevValue && currentAudioLink) {
       audioRef.current.play();
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    } else{
+    } else {
       audioRef.current.pause();
-      cancelAnimationFrame(animationRef.current)
     }
   }
-  
+
   const onChangeLinkYoutube = (e: any) => {
     setYoutubeLink(e.target.value)
   }
@@ -71,55 +72,50 @@ export default function Home() {
   const searchVideoMp3 = () => {
     const url = new URL(youtubeLink)
     console.log(url.searchParams.get("v"))
-    const  getVideoInformation = async() =>{
+    const getVideoInformation = async () => {
       const fetchApi = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get("v")}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`)
-      
+
       fetchApi.json().then(res => {
         setSearchResult(res.items[0])
-      })   
+      })
     }
 
-    const  getMp3Link = async() =>{
+    const getMp3Link = async () => {
       const fetchApi = await fetch(`https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get("v")}`, {
         headers: {
           'X-RapidAPI-Key': 'f67a6ec0ffmsh5fbe2152f4cb7f7p1151adjsnc93ad2e77038',
           'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
         }
       })
-      
+
       fetchApi.json().then(res => {
         setSearchLinkAudio(res.link)
         console.log(res.link)
-      })   
+      })
     }
     getVideoInformation()
     getMp3Link()
   }
-  
-  // useEffect(() => {
-  //   const seconds = Math.floor(audioRef.current.duration);
-  //   setDuration(seconds)
-  //   progressBarRef.current.max = seconds
-  // }, [audioRef?.current?.loadedmetadata, audioRef?.current?.readyState])
 
   useEffect(() => {
-    if (currentAudioLink){
+    if (currentAudioLink) {
       setTogglePlayButton(true)
       audioRef.current.play()
-      const seconds = Math.floor(audioRef.current.duration);
-      setDuration(seconds)
-      progressBarRef.current.max = seconds
-    } else{
+    } else {
       setTogglePlayButton(false)
       audioRef.current.pause()
     }
   }, [currentAudioLink])
 
   useEffect(() => {
-    if (currentTime == duration) {
+    if (currentTime >= duration) {
       setTogglePlayButton(false)
-      audioRef.current.pause()
-      timeTravel(0)
+      setDuration(0)
+      setCurrentTime(0)
+      setPosition(0)
+      setMarginLeft(0)
+      setProgressBarWidth(0)
+      setPercentage(0)
     }
   }, [currentTime, duration])
 
@@ -127,10 +123,10 @@ export default function Home() {
     <div className='relative h-screen w-full'>
       <Background src={background} alt={""} />
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20'>
-        <SearchContainer setDuration={setDuration} audioRef={audioRef} setCurrentTime={setCurrentTime} progressBarRef={progressBarRef} handleOnClickPlayButton={() => handleOnClickPlayButton()} setSongs={setSongs} searchAudioLink={searchAudioLink} onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} setCurrentAudioLink={setCurrentAudioLink} setSongImage={setSongImage} setSongTitle={setSongTitle}/>
+        <SearchContainer setCurrentTime={setCurrentTime} setDuration={setDuration} setPercentage={setPercentage} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} audioRef={audioRef} progressBarRef={progressBarRef} handleOnClickPlayButton={() => handleOnClickPlayButton()} setSongs={setSongs} searchAudioLink={searchAudioLink} onSearchClick={() => searchVideoMp3()} onChange={(e: any) => onChangeLinkYoutube(e)} searchResult={searchResult} setCurrentAudioLink={setCurrentAudioLink} setSongImage={setSongImage} setSongTitle={setSongTitle} />
         <div className='flex gap-8 justify-center h-[500px]'>
-          <MusicBoxContainer handleOnClickPlayButton={() => handleOnClickPlayButton()} onChangeCurrentTime={onChangeCurrentTime} start={calcTime(currentTime)} end={calcTime(duration)} togglePlayButton={togglePlayButton} progressBarRef={progressBarRef}  audioRef={audioRef} audioLink={currentAudioLink} songBanner={songImage} title={songTitle} />
-          <PlayList songs={songs} setSongs={setSongs} setCurrentAudioLink={setCurrentAudioLink}  setSongImage={setSongImage} setSongTitle={setSongTitle}/>
+          <MusicBoxContainer rangeRef={rangeRef} thumbRef={thumbRef} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} position={position} progressBarWidth={progressBarWidth} marginLeft={marginLeft} getCurrentDuration={getCurrentDuration} percentage={percentage} handleOnClickPlayButton={() => handleOnClickPlayButton()} onChange={onChange} start={calcTime(currentTime)} end={calcTime(duration)} togglePlayButton={togglePlayButton} progressBarRef={progressBarRef} audioRef={audioRef} audioLink={currentAudioLink} songBanner={songImage} title={songTitle} setDuration={setDuration} setCurrentTime={setCurrentTime} />
+          <PlayList setCurrentTime={setCurrentTime} setDuration={setDuration} setPercentage={setPercentage} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} songs={songs} setSongs={setSongs} setCurrentAudioLink={setCurrentAudioLink} setSongImage={setSongImage} setSongTitle={setSongTitle} />
         </div>
       </div>
     </div>

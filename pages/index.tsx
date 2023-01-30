@@ -31,7 +31,7 @@ export default function Home() {
   const [progressBarWidth, setProgressBarWidth] = useState<number>(0);
 
   const [volumeMute, setVolumeMute] = useState<boolean>(false);
-  const [volumeLevel, setVolumeLevel] = useState<number>(0);
+  const [volumeLevel, setVolumeLevel] = useState<number>(50);
 
   const rangeRef = useRef<any>();
   const thumbRef = useRef<any>();
@@ -133,7 +133,7 @@ export default function Home() {
   useEffect(() => {
     if (currentTime >= duration) {
       setTogglePlayButton(false);
-      setDuration(0);
+      // setDuration(0);
       setCurrentTime(0);
       setPosition(0);
       setMarginLeft(0);

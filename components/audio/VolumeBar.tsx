@@ -16,7 +16,17 @@ const VolumeBar: React.FC<VolumeBarModel> = ({volumeLevel, volumeMute, handleMut
       <Button onClick={() => handleMuteClick()}>
         <Image src={volumeMute ? mute : volume} alt="" className='w-[20px] h-[20px]'/>  
       </Button>
-      <input type="range" min="0" max="100" className='w-[100px]' value={volumeLevel} onChange={e => setVolumeLevel(e.currentTarget.value)} />
+
+      <div className='relative'>
+        <div style={{
+          backgroundColor: `blue`,
+          width: `calc(${volumeLevel}px * 2)`,
+          height: '6px',
+        }} 
+        className='absolute top-0 translate-y-3 rounded-full w-full'></div>
+        <input 
+          type="range" min="0" max="50" className='w-[100px] volume-bar' value={volumeLevel} onChange={e => setVolumeLevel(e.currentTarget.value)} />
+      </div>
     </div>
   )
 }

@@ -86,3 +86,23 @@
     pointer-events: none; /* Remove pointer events on thumb so user can click on the actual thumb beaneath it!  */
     user-select: none; /*  Prevent Accidentally highlighting the number while sliding the cursor  */
   }
+
+.volume-bar{
+  border: solid 2px #82CFD0;
+  border-radius: 8px;
+  height: 7px;
+  outline: none;
+  transition: 450ms ease-in;
+  -webkit-appearance: none;
+}
+
+.volume-bar::-webkit-slider-thumb{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  cursor: ew-resize;
+  background: #434343;
+  position: relative;
+  z-index: 20;
+}

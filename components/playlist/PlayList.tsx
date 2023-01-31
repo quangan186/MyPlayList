@@ -1,38 +1,28 @@
 import Title from '@/utilities/Title'
-import React from 'react'
+import React, { useEffect } from 'react'
 import SongCard from '../card/SongCard'
 
 interface PlayListModel{
   songs: any[]
   setSongs: any
-  // onSelectSongClick: React.MouseEventHandler<HTMLDivElement>
-  setCurrentAudioLink: any
-  setSongImage: any
-  setSongTitle: any
-  setPosition: any 
-  setMarginLeft: any 
-  setProgressBarWidth: any
-  setPercentage: any
-  setCurrentTime: any
-  setDuration: any
+  // // onSelectSongClick: React.MouseEventHandler<HTMLDivElement>
+  // setCurrentAudioLink: any
+  // setSongImage: any
+  // setSongTitle: any
+  // setPosition: any 
+  // setMarginLeft: any 
+  // setProgressBarWidth: any
+  // setPercentage: any
+  // setCurrentTime: any
+  // setDuration: any
+  playAudioFromPlaylist: any
 }
 
-const PlayList: React.FC<PlayListModel> = ({setCurrentTime, setDuration, setPercentage, setPosition, setMarginLeft, setProgressBarWidth, songs,setSongs, setCurrentAudioLink, setSongImage,setSongTitle}) => {
+const PlayList: React.FC<PlayListModel> = ({songs,setSongs, playAudioFromPlaylist}) => {
   const onDeleteSongClick = (id: string) => {
     setSongs(songs.filter(song => id !== song.searchResult.id))
   }
-
-  const playAudio = (song: any) => {
-      setCurrentTime(0)
-      setDuration(NaN)
-      setPosition(0)
-      setMarginLeft(0)
-      setProgressBarWidth(0)
-      setPercentage(0)
-      setCurrentAudioLink(song.audioLink)
-      setSongImage(song.searchResult.snippet.thumbnails.high.url)
-      setSongTitle(song.searchResult.snippet.title)
-  }
+  
   return (
     <div className='bg-black w-full overflow-y-scroll'>
         <Title className='text-white border-b border-b-gray-300 text-xl tracking-wider p-4 z-50 bg-black sticky top-0'>
@@ -40,9 +30,9 @@ const PlayList: React.FC<PlayListModel> = ({setCurrentTime, setDuration, setPerc
         </Title>
 
         <div className='flex flex-col gap-8 p-4'>
-          {songs.map((song: any) => {
+          {songs.map((song: any, index: number) => {
             return (
-              <SongCard banner={song.searchResult.snippet.thumbnails.high.url} songName={song.searchResult.snippet.title} onClick={() => playAudio(song)} onDeleteClick={() => onDeleteSongClick(song.searchResult.id)} key={song.searchResult.id} />
+              <SongCard banner={song.searchResult.snippet.thumbnails.high.url} songName={song.searchResult.snippet.title} onClick={() => playAudioFromPlaylist(song)} onDeleteClick={() => onDeleteSongClick(song.searchResult.id)} key={index} />
             )
           })}
           {/* <SongCard banner={banner} songName="Gira gira" />

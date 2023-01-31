@@ -97,12 +97,10 @@
 }
 
 .volume-bar::-webkit-slider-thumb{
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 1px;
+  height: 6px;
   -webkit-appearance: none;
-  cursor: ew-resize;
-  background: #434343;
+  background: transparent;
   position: relative;
   z-index: 20;
 }

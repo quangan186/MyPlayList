@@ -33,6 +33,8 @@ export default function Home() {
   const [volumeMute, setVolumeMute] = useState<boolean>(false);
   const [volumeLevel, setVolumeLevel] = useState<number>(50);
 
+  const [currentSongPlaylist, setCurrentSongPlaylist] = useState<any>();
+
   const rangeRef = useRef<any>();
   const thumbRef = useRef<any>();
 
@@ -118,6 +120,88 @@ export default function Home() {
     getMp3Link();
   };
 
+  const playNextSong = () => {
+    if (songs.length > 0) {
+      if (currentSongPlaylist.audioLink === currentAudioLink) {
+        var currentIndex = songs.indexOf(currentSongPlaylist);
+        console.log(currentIndex);
+        if (currentIndex + 1 >= songs.length) {
+          currentIndex = 0;
+          playAudioFromPlaylist(songs[currentIndex]);
+          setCurrentSongPlaylist(songs[currentIndex]);
+        } else {
+          playAudioFromPlaylist(songs[currentIndex + 1]);
+          setCurrentSongPlaylist(songs[currentIndex + 1]);
+        }
+      }
+    }
+  };
+
+  const playPrevSong = () => {
+    if (songs.length > 0) {
+      if (currentSongPlaylist.audioLink === currentAudioLink) {
+        var currentIndex = songs.indexOf(currentSongPlaylist);
+        console.log(currentIndex);
+        if (currentIndex > 0) {
+          playAudioFromPlaylist(songs[currentIndex - 1]);
+          setCurrentSongPlaylist(songs[currentIndex - 1]);
+        } else {
+          currentIndex = songs.length - 1;
+          playAudioFromPlaylist(songs[currentIndex]);
+          setCurrentSongPlaylist(songs[currentIndex]);
+        }
+      }
+    }
+  };
+
+  const playAudioFromPlaylist = (song: any) => {
+    console.log(songs);
+    setCurrentTime(0);
+    setDuration(NaN);
+    setPosition(0);
+    setMarginLeft(0);
+    setProgressBarWidth(0);
+    setPercentage(0);
+    setCurrentAudioLink(song.audioLink);
+    setSongImage(song.searchResult.snippet.thumbnails.high.url);
+    setSongTitle(song.searchResult.snippet.title);
+    setCurrentSongPlaylist(song);
+  };
+
+  useEffect(() => {
+    const autoPlayNext = (song: any) => {
+      setCurrentTime(0);
+      setDuration(NaN);
+      setPosition(0);
+      setMarginLeft(0);
+      setProgressBarWidth(0);
+      setPercentage(0);
+      setCurrentAudioLink(song.audioLink);
+      setSongImage(song.searchResult.snippet.thumbnails.high.url);
+      setSongTitle(song.searchResult.snippet.title);
+      setCurrentSongPlaylist(song);
+    };
+    if (
+      currentSongPlaylist &&
+      currentSongPlaylist.audioLink === currentAudioLink
+    ) {
+      var currentIndex = songs.indexOf(currentSongPlaylist);
+      console.log(currentIndex);
+      if (currentTime >= duration){
+        if (currentIndex + 1 >= songs.length) {
+          // autoPlayNext(songs[currentIndex]);
+          setCurrentSongPlaylist(songs[currentIndex]);
+          audioRef.current.pause();
+          setTogglePlayButton(false)
+          currentIndex = 0;
+        } else {
+          autoPlayNext(songs[currentIndex + 1]);
+          setCurrentSongPlaylist(songs[currentIndex + 1]);
+        }
+      }
+    }
+  }, [currentAudioLink, currentSongPlaylist, currentTime, duration, songs]);
+
   useEffect(() => {
     if (currentAudioLink) {
       setTogglePlayButton(true);
@@ -167,6 +251,8 @@ export default function Home() {
         />
         <div className="flex gap-8 justify-center h-[500px]">
           <MusicBoxContainer
+            nextFunc={playNextSong}
+            prevFunc={playPrevSong}
             volumeLevel={volumeLevel}
             setVolumeLevel={setVolumeLevel}
             volumeMute={volumeMute}
@@ -195,17 +281,9 @@ export default function Home() {
             setCurrentTime={setCurrentTime}
           />
           <PlayList
-            setCurrentTime={setCurrentTime}
-            setDuration={setDuration}
-            setPercentage={setPercentage}
-            setPosition={setPosition}
-            setMarginLeft={setMarginLeft}
-            setProgressBarWidth={setProgressBarWidth}
             songs={songs}
             setSongs={setSongs}
-            setCurrentAudioLink={setCurrentAudioLink}
-            setSongImage={setSongImage}
-            setSongTitle={setSongTitle}
+            playAudioFromPlaylist={playAudioFromPlaylist}
           />
         </div>
       </div>

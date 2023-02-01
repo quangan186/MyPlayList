@@ -4,14 +4,18 @@ import loop from '@/assets/svg/loop.svg'
 import random from '@/assets/svg/random.svg'
 import Button from '@/utilities/Button'
 
-const RandomLoopButton = () => {
+interface RandomLoopButtonModel{
+  loopFunc: any
+  randomFunc: any
+}
+const RandomLoopButton: React.FC<RandomLoopButtonModel> = ({loopFunc, randomFunc}) => {
   return (
     <div className='inline-flex w-full gap-4'>
-        <Button className=''>
+        <Button className='' onClick={randomFunc}>
             <Image src={random} alt="" className='w-[20px] h-[20px]' />
         </Button>
 
-        <Button className=''>
+        <Button className='' onClick={loopFunc}>
             <Image src={loop} alt="" className='w-[20px] h-[20px]'/>
         </Button>
     </div>

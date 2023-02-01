@@ -17,12 +17,14 @@ interface AudioButtonModel{
   handleMuteClick: any
   setVolumeLevel: any
   volumeLevel: number
+  loopFunc: any
+  randomFunc: any
 }
 
-const AudioButtonBar: React.FC<AudioButtonModel> = ({volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, prevFunc, playFunc, nextFunc, togglePlayButton}) => {
+const AudioButtonBar: React.FC<AudioButtonModel> = ({randomFunc, loopFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, prevFunc, playFunc, nextFunc, togglePlayButton}) => {
   return (
     <div className="flex justify-between items-center">
-      <RandomLoopButton />
+      <RandomLoopButton randomFunc={randomFunc} loopFunc={loopFunc} />
       <div className="flex w-full justify-center gap-4 items-center">
         <Button className="" onClick={prevFunc}>
           <Image

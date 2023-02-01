@@ -34,6 +34,9 @@ export default function Home() {
   const [volumeLevel, setVolumeLevel] = useState<number>(50);
 
   const [currentSongPlaylist, setCurrentSongPlaylist] = useState<any>();
+  const [isPlaylist, setIsPlaylist] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isLooped, setIsLooped] = useState<boolean>(false);
 
   const rangeRef = useRef<any>();
   const thumbRef = useRef<any>();
@@ -127,9 +130,11 @@ export default function Home() {
         console.log(currentIndex);
         if (currentIndex + 1 >= songs.length) {
           currentIndex = 0;
+          setCurrentIndex(currentIndex);
           playAudioFromPlaylist(songs[currentIndex]);
           setCurrentSongPlaylist(songs[currentIndex]);
         } else {
+          setCurrentIndex(currentIndex);
           playAudioFromPlaylist(songs[currentIndex + 1]);
           setCurrentSongPlaylist(songs[currentIndex + 1]);
         }
@@ -143,10 +148,12 @@ export default function Home() {
         var currentIndex = songs.indexOf(currentSongPlaylist);
         console.log(currentIndex);
         if (currentIndex > 0) {
+          setCurrentIndex(currentIndex);
           playAudioFromPlaylist(songs[currentIndex - 1]);
           setCurrentSongPlaylist(songs[currentIndex - 1]);
         } else {
           currentIndex = songs.length - 1;
+          setCurrentIndex(currentIndex);
           playAudioFromPlaylist(songs[currentIndex]);
           setCurrentSongPlaylist(songs[currentIndex]);
         }
@@ -166,6 +173,7 @@ export default function Home() {
     setSongImage(song.searchResult.snippet.thumbnails.high.url);
     setSongTitle(song.searchResult.snippet.title);
     setCurrentSongPlaylist(song);
+    setIsPlaylist(true);
   };
 
   useEffect(() => {
@@ -181,38 +189,58 @@ export default function Home() {
       setSongTitle(song.searchResult.snippet.title);
       setCurrentSongPlaylist(song);
     };
-    if (
-      currentSongPlaylist &&
-      currentSongPlaylist.audioLink === currentAudioLink
-    ) {
+    if (isPlaylist && currentSongPlaylist.audioLink === currentAudioLink) {
       var currentIndex = songs.indexOf(currentSongPlaylist);
       console.log(currentIndex);
-      if (currentTime >= duration){
+      if (currentTime >= duration) {
         if (currentIndex + 1 >= songs.length) {
-          // autoPlayNext(songs[currentIndex]);
-          setCurrentSongPlaylist(songs[currentIndex]);
-          audioRef.current.pause();
-          setTogglePlayButton(false)
+          setCurrentIndex(currentIndex + 1);
           currentIndex = 0;
+          autoPlayNext(songs[currentIndex]);
         } else {
           autoPlayNext(songs[currentIndex + 1]);
           setCurrentSongPlaylist(songs[currentIndex + 1]);
+          setCurrentIndex(currentIndex + 1);
         }
       }
     }
-  }, [currentAudioLink, currentSongPlaylist, currentTime, duration, songs]);
+  }, [
+    currentAudioLink,
+    currentSongPlaylist,
+    currentTime,
+    duration,
+    isPlaylist,
+    songs,
+  ]);
+
+  const handleLoopButton = () => {
+    setIsLooped((state) => !state);
+  };
+
+  const handleRandomButton = () => {
+    console.log("Hello");
+  };
 
   useEffect(() => {
     if (currentAudioLink) {
-      setTogglePlayButton(true);
-      audioRef.current.play();
-      audioRef.current.volume = volumeLevel / 100;
+      if (isPlaylist && (currentIndex < songs.length || isLooped)) {
+        setTogglePlayButton(true);
+        audioRef.current.play();
+        audioRef.current.volume = volumeLevel / 100;
+      }
     } else {
       setTogglePlayButton(false);
       audioRef.current.pause();
       audioRef.current.volume = volumeLevel / 100;
     }
-  }, [currentAudioLink, volumeLevel]);
+  }, [
+    currentAudioLink,
+    currentIndex,
+    isLooped,
+    isPlaylist,
+    songs.length,
+    volumeLevel,
+  ]);
 
   useEffect(() => {
     if (currentTime >= duration) {
@@ -251,6 +279,8 @@ export default function Home() {
         />
         <div className="flex gap-8 justify-center h-[500px]">
           <MusicBoxContainer
+            randomFunc={handleRandomButton}
+            loopFunc={handleLoopButton}
             nextFunc={playNextSong}
             prevFunc={playPrevSong}
             volumeLevel={volumeLevel}

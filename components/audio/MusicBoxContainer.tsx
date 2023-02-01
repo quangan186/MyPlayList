@@ -32,14 +32,16 @@ interface MusicBoxModel{
   volumeLevel: number
   nextFunc: any
   prevFunc: any
+  loopFunc: any
+  randomFunc: any
 }
-const MusicBoxContainer:React.FC<MusicBoxModel> = ({prevFunc, nextFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
+const MusicBoxContainer:React.FC<MusicBoxModel> = ({randomFunc, loopFunc, prevFunc, nextFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
   return (
     <div className='w-full bg-white px-12 py-4 relative flex flex-col'>
       <audio ref={audioRef}  src={audioLink} preload="metadata" onLoadedData={(e) => setDuration(Math.floor(e.currentTarget.duration))} onTimeUpdate={getCurrentDuration} muted={volumeMute} ></audio>
       <MusicInfo className='h-full' banner={songBanner} title={title} />
       <AudioRange rangeRef={rangeRef} thumbRef={thumbRef} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} position={position} progressBarWidth={progressBarWidth} marginLeft={marginLeft} percentage={percentage} onChange={onChange} start={start} end={end} className='py-4' />
-      <AudioButtonBar prevFunc={prevFunc} nextFunc={nextFunc} volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
+      <AudioButtonBar randomFunc={randomFunc} loopFunc={loopFunc} prevFunc={prevFunc} nextFunc={nextFunc} volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
     </div>
   )
 }

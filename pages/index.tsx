@@ -204,14 +204,7 @@ export default function Home() {
         }
       }
     }
-  }, [
-    currentAudioLink,
-    currentSongPlaylist,
-    currentTime,
-    duration,
-    isPlaylist,
-    songs,
-  ]);
+  }, [currentAudioLink, currentSongPlaylist, currentTime, duration, isLooped, isPlaylist, songs]);
 
   const handleLoopButton = () => {
     setIsLooped((state) => !state);
@@ -223,10 +216,12 @@ export default function Home() {
 
   useEffect(() => {
     if (currentAudioLink) {
-      if (isPlaylist && (currentIndex < songs.length || isLooped)) {
-        setTogglePlayButton(true);
-        audioRef.current.play();
-        audioRef.current.volume = volumeLevel / 100;
+      if (isPlaylist) {
+        if (isLooped || (currentIndex < songs.length)){
+          setTogglePlayButton(true);
+          audioRef.current.play();
+          audioRef.current.volume = volumeLevel / 100;
+        }      
       }
     } else {
       setTogglePlayButton(false);

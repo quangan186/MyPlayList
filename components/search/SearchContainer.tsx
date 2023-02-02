@@ -22,6 +22,7 @@ interface SearchBarModel {
   setMarginLeft: any;
   setProgressBarWidth: any;
   setPercentage: any;
+  songs: any[]
 }
 
 const SearchContainer: React.FC<SearchBarModel> = ({
@@ -39,6 +40,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
   setCurrentAudioLink,
   setSongImage,
   setSongTitle,
+  songs
 }) => {
   const playAudio = () => {
     setCurrentTime(0);
@@ -48,7 +50,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
     setProgressBarWidth(0);
     setPercentage(0);
     setCurrentAudioLink(searchAudioLink);
-    setSongImage(searchResult.snippet.thumbnails.high.url);
+    setSongImage(searchResult.snippet.thumbnails.maxres.url);
     setSongTitle(searchResult.snippet.title);
   };
 
@@ -60,6 +62,13 @@ const SearchContainer: React.FC<SearchBarModel> = ({
         audioLink: searchAudioLink,
       },
     ]);
+    
+    var songStorage = [...songs, {
+      searchResult: searchResult,
+      audioLink: searchAudioLink,
+    }]
+
+    localStorage.setItem("songs", JSON.stringify(songStorage))
   };
 
   return (
@@ -72,7 +81,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
       >
         {searchResult && (
           <SearchResult
-            banner={searchResult.snippet.thumbnails.high.url}
+            banner={searchResult.snippet.thumbnails.maxres.url}
             songName={searchResult.snippet.title}
             onClick={() => playAudio()}
             onAddClick={() => onAddSongClick()}

@@ -27,7 +27,7 @@ const SongCard: React.FC<SearchResultModel> = ({
       </div>
 
       <Button className="hover:opacity-70 absolute top-1/2 right-0 -translate-y-1/2" onClick={onDeleteClick}>
-        <Image src={remove} alt="" className="max-h-[40px] max-w-[40px]" />
+        <Image src={remove} alt="" className="max-h-[28px] max-w-[28px]" />
       </Button>
     </div>
   );

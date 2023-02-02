@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import loop from '@/assets/svg/loop.svg'
+
 import random from '@/assets/svg/random.svg'
 import Button from '@/utilities/Button'
 
@@ -15,9 +15,7 @@ const RandomLoopButton: React.FC<RandomLoopButtonModel> = ({loopFunc, randomFunc
             <Image src={random} alt="" className='w-[20px] h-[20px]' />
         </Button>
 
-        <Button className='' onClick={loopFunc}>
-            <Image src={loop} alt="" className='w-[20px] h-[20px]'/>
-        </Button>
+        
     </div>
   )
 }

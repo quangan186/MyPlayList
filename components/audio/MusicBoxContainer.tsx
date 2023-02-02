@@ -2,6 +2,7 @@ import React from 'react'
 import MusicInfo from '../info/MusicInfo'
 import AudioButtonBar from './AudioButtonBar'
 import AudioRange from './AudioProgress'
+import VolumeBar from './VolumeBar'
 
 interface MusicBoxModel{
   audioLink: string
@@ -34,14 +35,17 @@ interface MusicBoxModel{
   prevFunc: any
   loopFunc: any
   randomFunc: any
+  isLooped: boolean
+  handleLoopOnceButton: any
 }
-const MusicBoxContainer:React.FC<MusicBoxModel> = ({randomFunc, loopFunc, prevFunc, nextFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
+const MusicBoxContainer:React.FC<MusicBoxModel> = ({handleLoopOnceButton, isLooped, randomFunc, loopFunc, prevFunc, nextFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
   return (
-    <div className='w-full bg-white px-12 py-4 relative flex flex-col'>
+    <div className='w-full border border-gray-300 rounded-lg shadow-lg px-12 py-4 relative flex flex-col'>
       <audio ref={audioRef}  src={audioLink} preload="metadata" onLoadedData={(e) => setDuration(Math.floor(e.currentTarget.duration))} onTimeUpdate={getCurrentDuration} muted={volumeMute} ></audio>
       <MusicInfo className='h-full' banner={songBanner} title={title} />
       <AudioRange rangeRef={rangeRef} thumbRef={thumbRef} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} position={position} progressBarWidth={progressBarWidth} marginLeft={marginLeft} percentage={percentage} onChange={onChange} start={start} end={end} className='py-4' />
-      <AudioButtonBar randomFunc={randomFunc} loopFunc={loopFunc} prevFunc={prevFunc} nextFunc={nextFunc} volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
+      <AudioButtonBar handleLoopOnceButton={handleLoopOnceButton} isLooped={isLooped}  randomFunc={randomFunc} loopFunc={loopFunc} prevFunc={prevFunc} nextFunc={nextFunc} volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} togglePlayButton={togglePlayButton} playFunc={handleOnClickPlayButton}/>
+      <VolumeBar volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel} volumeMute={volumeMute} handleMuteClick={handleMuteClick} />
     </div>
   )
 }

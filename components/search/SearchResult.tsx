@@ -30,7 +30,7 @@ const SearchResult: React.FC<SearchResultModel> = ({
       </div>
       
       <Button className="hover:opacity-70" onClick={onAddClick}>
-        <Image src={add} alt="" className="max-h-[40px] max-w-[40px]" />
+        <Image src={add} alt="" className="max-h-[28px] max-w-[28px]" />
       </Button>
     </div>
   );

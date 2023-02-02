@@ -9,7 +9,7 @@ interface ButtonModel{
 
 const Button: React.FC<ButtonModel> = ({type, children, className, onClick}) => {
   return (
-    <button type={type} onClick={onClick} className={`${className}`} >{children}</button>  
+    <button type={type} onClick={onClick} className={`${className} outline-none`} >{children}</button>  
   )
 }
 

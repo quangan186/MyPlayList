@@ -22,13 +22,13 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
           <img
             src={banner}
             alt=""
-            className="md:w-[280px] md:h-[280px] mx-auto rounded-full animate-spin-slow"
+            className={`object-cover md:h-[240px] mx-auto rounded-lg`}
           />
         ) : (
           <Image
             src={defaultImg}
             alt=""
-            className="md:w-[280px] md:h-[280px] mx-auto rounded-full"
+            className="md:h-[240px] mx-auto rounded-lg"
           />
         )}
       </div>

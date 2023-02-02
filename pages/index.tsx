@@ -1,5 +1,3 @@
-import Background from "@/components/background/Background";
-import background from "@/assets/gif/background.gif";
 import MusicBoxContainer from "@/components/audio/MusicBoxContainer";
 import SearchContainer from "@/components/search/SearchContainer";
 import { useEffect, useRef, useState } from "react";
@@ -170,7 +168,7 @@ export default function Home() {
     setProgressBarWidth(0);
     setPercentage(0);
     setCurrentAudioLink(song.audioLink);
-    setSongImage(song.searchResult.snippet.thumbnails.high.url);
+    setSongImage(song.searchResult.snippet.thumbnails.maxres.url);
     setSongTitle(song.searchResult.snippet.title);
     setCurrentSongPlaylist(song);
     setIsPlaylist(true);
@@ -185,7 +183,7 @@ export default function Home() {
       setProgressBarWidth(0);
       setPercentage(0);
       setCurrentAudioLink(song.audioLink);
-      setSongImage(song.searchResult.snippet.thumbnails.high.url);
+      setSongImage(song.searchResult.snippet.thumbnails.maxres.url);
       setSongTitle(song.searchResult.snippet.title);
       setCurrentSongPlaylist(song);
     };
@@ -210,9 +208,17 @@ export default function Home() {
     setIsLooped((state) => !state);
   };
 
-  const handleRandomButton = () => {
+  const handleLoopOnceButton = () => {
     console.log("Hello");
   };
+
+  useEffect(() => {
+    localStorage.getItem("songs") !== null ? setSongs(JSON.parse(localStorage.getItem("songs") || "")) : setSongs([])
+  }, [])
+  
+  useEffect(() => {
+    audioRef.current.volume = volumeLevel / 100;
+  }, [volumeLevel])
 
   useEffect(() => {
     if (currentAudioLink) {
@@ -220,13 +226,11 @@ export default function Home() {
         if (isLooped || (currentIndex < songs.length)){
           setTogglePlayButton(true);
           audioRef.current.play();
-          audioRef.current.volume = volumeLevel / 100;
         }      
       }
     } else {
       setTogglePlayButton(false);
       audioRef.current.pause();
-      audioRef.current.volume = volumeLevel / 100;
     }
   }, [
     currentAudioLink,
@@ -234,13 +238,11 @@ export default function Home() {
     isLooped,
     isPlaylist,
     songs.length,
-    volumeLevel,
   ]);
 
   useEffect(() => {
     if (currentTime >= duration) {
       setTogglePlayButton(false);
-      // setDuration(0);
       setCurrentTime(0);
       setPosition(0);
       setMarginLeft(0);
@@ -250,10 +252,10 @@ export default function Home() {
   }, [currentTime, duration]);
 
   return (
-    <div className="relative h-screen w-full">
-      <Background src={background} alt={""} />
+    <div className="relative h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9]">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20">
         <SearchContainer
+          songs={songs}
           setCurrentTime={setCurrentTime}
           setDuration={setDuration}
           setPercentage={setPercentage}
@@ -272,9 +274,10 @@ export default function Home() {
           setSongImage={setSongImage}
           setSongTitle={setSongTitle}
         />
-        <div className="flex gap-8 justify-center h-[500px]">
+        <div className="flex gap-20 justify-center h-[500px]">
           <MusicBoxContainer
-            randomFunc={handleRandomButton}
+            isLooped={isLooped}
+            handleLoopOnceButton={handleLoopOnceButton}
             loopFunc={handleLoopButton}
             nextFunc={playNextSong}
             prevFunc={playPrevSong}
@@ -303,8 +306,7 @@ export default function Home() {
             songBanner={songImage}
             title={songTitle}
             setDuration={setDuration}
-            setCurrentTime={setCurrentTime}
-          />
+            setCurrentTime={setCurrentTime} randomFunc={undefined}          />
           <PlayList
             songs={songs}
             setSongs={setSongs}

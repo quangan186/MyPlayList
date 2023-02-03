@@ -20,16 +20,16 @@ const PlayList: React.FC<PlayListModel> = ({
   };
 
   return (
-    <div className="bg-black w-full overflow-y-scroll">
-      <Title className="text-white border-b border-b-gray-300 text-xl tracking-wider p-4 z-50 bg-black sticky top-0">
+    <div className="bg-black w-full h-full rounded-lg flex flex-col">
+      <Title className="text-white border-b border-b-gray-300 text-xl tracking-wider p-4 z-50">
         My Playlist
       </Title>
 
-      <div className="flex flex-col gap-8 p-4">
+      <div className="flex flex-col gap-8 p-4 overflow-y-scroll my-playlist">
         {songs.map((song: any, index: number) => {
           return (
             <SongCard
-              banner={song.searchResult.snippet.thumbnails.maxres.url}
+              banner={song.searchResult.snippet.thumbnails.high.url}
               songName={song.searchResult.snippet.title}
               onClick={() => playAudioFromPlaylist(song)}
               onDeleteClick={() => onDeleteSongClick(song.searchResult.id)}

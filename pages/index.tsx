@@ -35,6 +35,7 @@ export default function Home() {
   const [isPlaylist, setIsPlaylist] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isLooped, setIsLooped] = useState<boolean>(false);
+  const [isLoopedOnce, setIsLoopedOnce] = useState<boolean>(false);
 
   const rangeRef = useRef<any>();
   const thumbRef = useRef<any>();
@@ -138,6 +139,9 @@ export default function Home() {
         }
       }
     }
+    if (isLoopedOnce){
+      setIsLoopedOnce(false)
+    }
   };
 
   const playPrevSong = () => {
@@ -168,7 +172,7 @@ export default function Home() {
     setProgressBarWidth(0);
     setPercentage(0);
     setCurrentAudioLink(song.audioLink);
-    setSongImage(song.searchResult.snippet.thumbnails.maxres.url);
+    setSongImage(song.searchResult.snippet.thumbnails.high.url);
     setSongTitle(song.searchResult.snippet.title);
     setCurrentSongPlaylist(song);
     setIsPlaylist(true);
@@ -183,50 +187,72 @@ export default function Home() {
       setProgressBarWidth(0);
       setPercentage(0);
       setCurrentAudioLink(song.audioLink);
-      setSongImage(song.searchResult.snippet.thumbnails.maxres.url);
+      setSongImage(song.searchResult.snippet.thumbnails.high.url);
       setSongTitle(song.searchResult.snippet.title);
       setCurrentSongPlaylist(song);
     };
     if (isPlaylist && currentSongPlaylist.audioLink === currentAudioLink) {
-      var currentIndex = songs.indexOf(currentSongPlaylist);
-      console.log(currentIndex);
-      if (currentTime >= duration) {
-        if (currentIndex + 1 >= songs.length) {
-          setCurrentIndex(currentIndex + 1);
-          currentIndex = 0;
-          autoPlayNext(songs[currentIndex]);
-        } else {
-          autoPlayNext(songs[currentIndex + 1]);
-          setCurrentSongPlaylist(songs[currentIndex + 1]);
-          setCurrentIndex(currentIndex + 1);
+      if (isLooped) {
+        var currentIndex = songs.indexOf(currentSongPlaylist);
+        console.log(currentIndex);
+        if (currentTime >= duration) {
+          if (currentIndex + 1 >= songs.length) {
+            setCurrentIndex(currentIndex + 1);
+            currentIndex = 0;
+            autoPlayNext(songs[currentIndex]);
+          } else {
+            autoPlayNext(songs[currentIndex + 1]);
+            setCurrentSongPlaylist(songs[currentIndex + 1]);
+            setCurrentIndex(currentIndex + 1);
+          }
         }
       }
     }
-  }, [currentAudioLink, currentSongPlaylist, currentTime, duration, isLooped, isPlaylist, songs]);
+  }, [
+    currentAudioLink,
+    currentSongPlaylist,
+    currentTime,
+    duration,
+    isLooped,
+    isPlaylist,
+    songs,
+  ]);
 
   const handleLoopButton = () => {
     setIsLooped((state) => !state);
+    if (isLoopedOnce) {
+      setIsLoopedOnce(false);
+    }
   };
 
   const handleLoopOnceButton = () => {
-    console.log("Hello");
+    setIsLoopedOnce((state) => !state);
+    // const currentLoopType = isLoopedOnce
+    if (isLooped) {
+      setIsLooped(false);
+    }
   };
 
   useEffect(() => {
-    localStorage.getItem("songs") !== null ? setSongs(JSON.parse(localStorage.getItem("songs") || "")) : setSongs([])
-  }, [])
-  
+    localStorage.getItem("songs") !== null
+      ? setSongs(JSON.parse(localStorage.getItem("songs") || ""))
+      : setSongs([]);
+  }, []);
+
   useEffect(() => {
     audioRef.current.volume = volumeLevel / 100;
-  }, [volumeLevel])
+  }, [volumeLevel]);
 
   useEffect(() => {
     if (currentAudioLink) {
       if (isPlaylist) {
-        if (isLooped || (currentIndex < songs.length)){
+        if (isLoopedOnce || isLooped || currentIndex < songs.length) {
           setTogglePlayButton(true);
           audioRef.current.play();
-        }      
+        }
+      } else {
+        setTogglePlayButton(true);
+        audioRef.current.play();
       }
     } else {
       setTogglePlayButton(false);
@@ -236,20 +262,25 @@ export default function Home() {
     currentAudioLink,
     currentIndex,
     isLooped,
+    isLoopedOnce,
     isPlaylist,
     songs.length,
   ]);
 
   useEffect(() => {
     if (currentTime >= duration) {
-      setTogglePlayButton(false);
+      if (!isLooped && !isLoopedOnce) {
+        setTogglePlayButton(false);
+      } else {
+        setTogglePlayButton(true);
+      }
       setCurrentTime(0);
       setPosition(0);
       setMarginLeft(0);
       setProgressBarWidth(0);
       setPercentage(0);
     }
-  }, [currentTime, duration]);
+  }, [currentTime, duration, isLooped, isLoopedOnce]);
 
   return (
     <div className="relative h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9]">
@@ -276,6 +307,7 @@ export default function Home() {
         />
         <div className="flex gap-20 justify-center h-[500px]">
           <MusicBoxContainer
+            isLoopedOnce={isLoopedOnce}
             isLooped={isLooped}
             handleLoopOnceButton={handleLoopOnceButton}
             loopFunc={handleLoopButton}
@@ -306,7 +338,8 @@ export default function Home() {
             songBanner={songImage}
             title={songTitle}
             setDuration={setDuration}
-            setCurrentTime={setCurrentTime} randomFunc={undefined}          />
+            setCurrentTime={setCurrentTime}
+          />
           <PlayList
             songs={songs}
             setSongs={setSongs}

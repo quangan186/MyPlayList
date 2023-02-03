@@ -8,6 +8,7 @@ import pause from '@/assets/svg/pause.svg'
 import loop from '@/assets/svg/loop.svg'
 import loopOnce from '@/assets/svg/loopOnce.svg'
 import activeLoop from '@/assets/svg/activeLoop.svg'
+import activeLoopOnce from "@/assets/svg/activeLoopOnce.svg"
 
 interface AudioButtonModel{
   prevFunc?: React.MouseEventHandler<HTMLButtonElement>,
@@ -19,12 +20,12 @@ interface AudioButtonModel{
   setVolumeLevel: any
   volumeLevel: number
   loopFunc: any
-  randomFunc: any
   isLooped: boolean
   handleLoopOnceButton: any
+  isLoopedOnce: boolean
 }
 
-const AudioButtonBar: React.FC<AudioButtonModel> = ({handleLoopOnceButton, loopFunc, isLooped, prevFunc, playFunc, nextFunc, togglePlayButton}) => {
+const AudioButtonBar: React.FC<AudioButtonModel> = ({isLoopedOnce, handleLoopOnceButton, loopFunc, isLooped, prevFunc, playFunc, nextFunc, togglePlayButton}) => {
   return (
     <div className="flex justify-between items-center">
       <Button className='w-full' onClick={loopFunc}>
@@ -50,7 +51,7 @@ const AudioButtonBar: React.FC<AudioButtonModel> = ({handleLoopOnceButton, loopF
       </div>
 
       <Button className='w-full flex justify-end' onClick={handleLoopOnceButton}>
-        <Image src={loopOnce} alt="" className='w-[20px] h-[20px]'/>
+        <Image src={isLoopedOnce ? activeLoopOnce : loopOnce} alt="" className='w-[20px] h-[20px]'/>
       </Button>
     </div>
   );

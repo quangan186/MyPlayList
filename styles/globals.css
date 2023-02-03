@@ -107,3 +107,19 @@
   z-index: 20;
   cursor: pointer;
 }
+
+.my-playlist::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.my-playlist::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 4px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+.my-playlist::-webkit-scrollbar-thumb {
+  background: whitesmoke;
+  border-radius: 10px;
+}

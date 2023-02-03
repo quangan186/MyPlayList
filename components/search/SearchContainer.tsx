@@ -50,7 +50,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
     setProgressBarWidth(0);
     setPercentage(0);
     setCurrentAudioLink(searchAudioLink);
-    setSongImage(searchResult.snippet.thumbnails.maxres.url);
+    setSongImage(searchResult.snippet.thumbnails.high.url);
     setSongTitle(searchResult.snippet.title);
   };
 
@@ -81,7 +81,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
       >
         {searchResult && (
           <SearchResult
-            banner={searchResult.snippet.thumbnails.maxres.url}
+            banner={searchResult.snippet.thumbnails.high.url}
             songName={searchResult.snippet.title}
             onClick={() => playAudio()}
             onAddClick={() => onAddSongClick()}

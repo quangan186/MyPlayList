@@ -10,6 +10,17 @@ module.exports = {
         'spin-slow': 'spin 10s linear infinite',
       }
     },
+    screens: {
+      'sm': '640px',
+
+      'md': '876px',
+      
+      'xl': '1024px',
+
+      '2xl': '1280px',
+      
+      '3xl': '1500px',
+    },
   },
   plugins: [],
 }

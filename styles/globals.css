@@ -124,3 +124,20 @@
   opacity: 0.5;
   /* border-radius: 10px; */
 }
+
+.song-title {
+  display: block;
+  margin: auto auto;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 100%;
+}
+
+@keyframes song-title {
+  0% {
+      transform: translate(0, 0);
+  }
+  100% {
+      transform: translate(-100%, 0);
+  }
+}

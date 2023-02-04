@@ -3,17 +3,23 @@ import Image from 'next/image'
 import React, { ChangeEventHandler } from 'react'
 import search from '@/assets/svg/search.svg'
 interface SearchBarModel{
-  onChange?: ChangeEventHandler<HTMLInputElement>
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  setYoutubeLink: any
+  onHandleSubmit?: any
+  searchRef: any
+  searchMp3:any
 }
-const SearchBar: React.FC<SearchBarModel> = ({onChange, onClick}) => {
+const SearchBar: React.FC<SearchBarModel> = ({searchMp3, searchRef, onHandleSubmit}) => {
   return (
-    <div className='flex w-full relative bg-[#EEEEEE] h-[60px] items-center rounded-lg'>
-        <input type='text' className='w-full px-6 py-2 border-none outline-none bg-transparent rounded-full' placeholder='Copy and paste the Youtube link here' onChange={onChange}/>
-        <Button type='submit' onClick={onClick} className='flex justify-center items-center max-w-[40px] mr-4 max-h-[40px]'>
+    <form onSubmit={onHandleSubmit} className='flex w-full relative items-center rounded-lg z-50'>
+        <input ref={searchRef} type='text' className='relative w-full px-6 py-4 border-none outline-none bg-transparent rounded-lg bg-white' placeholder='Copy and paste the Youtube link here' onKeyDown={(e) => {
+          if (e.key === "Enter"){
+            searchMp3(e.currentTarget.value)
+          }
+        }} name="youtubeLink"/>
+        <Button type='submit' className='flex justify-center items-center max-w-[40px] mr-4 max-h-[40px] absolute right-0'>
             <Image src={search} alt="" className='' />
         </Button>
-    </div>
+    </form>
   )
 }
 

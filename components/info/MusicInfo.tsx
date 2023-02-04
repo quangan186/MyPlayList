@@ -1,4 +1,3 @@
-import Text from "@/utilities/Text";
 import Title from "@/utilities/Title";
 import Image from "next/image";
 import React from "react";
@@ -8,9 +7,11 @@ interface MusicInfoModel {
   className?: string;
   banner: string;
   title: string;
+  togglePlayButton: boolean
 }
 
 const MusicInfo: React.FC<MusicInfoModel> = ({
+  togglePlayButton,
   className,
   banner,
   title,
@@ -22,13 +23,13 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
           <img
             src={banner}
             alt=""
-            className={`mx-auto md:w-[240px] md:h-[240px] rounded-full`}
+            className={`mx-auto w-[200px] h-[200px] md:w-[260px] md:h-[260px] rounded-full ${togglePlayButton ? "animate-spin-slow" : ""}`}
           />
         ) : (
           <Image
             src={defaultImg}
             alt=""
-            className="mx-auto md:w-[240px] md:h-[240px] rounded-full"
+            className="mx-auto md:w-[260px] md:h-[260px] rounded-full"
           />
         )}
       </div>

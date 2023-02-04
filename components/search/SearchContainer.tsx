@@ -4,8 +4,8 @@ import SearchResult from "./SearchResult";
 
 interface SearchBarModel {
   searchResult?: any;
-  onSearchClick?: React.MouseEventHandler<HTMLButtonElement>;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onHandleSubmit: any
+  setYoutubeLink: any
   onSongClick?: React.MouseEventHandler<HTMLDivElement>;
   onAddClick?: React.MouseEventHandler<HTMLButtonElement>;
   setCurrentAudioLink: any;
@@ -23,6 +23,9 @@ interface SearchBarModel {
   setProgressBarWidth: any;
   setPercentage: any;
   songs: any[]
+  setError: any
+  searchRef: any
+  searchMp3: any
 }
 
 const SearchContainer: React.FC<SearchBarModel> = ({
@@ -35,12 +38,15 @@ const SearchContainer: React.FC<SearchBarModel> = ({
   searchAudioLink,
   setSongs,
   searchResult,
-  onSearchClick,
-  onChange,
+  onHandleSubmit,
+  setYoutubeLink,
   setCurrentAudioLink,
   setSongImage,
   setSongTitle,
-  songs
+  songs,
+  setError,
+  searchRef,
+  searchMp3
 }) => {
   const playAudio = () => {
     setCurrentTime(0);
@@ -60,8 +66,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
       audioLink: searchAudioLink,
     }
     if (songs.filter(song => song.searchResult.id === songAdded.searchResult.id).length > 0){
-
-      alert("Song has been added already")
+      setError("Song has been added already!")
     } else{
       setSongs((prevSong: any) => [
         ...prevSong, songAdded
@@ -78,10 +83,10 @@ const SearchContainer: React.FC<SearchBarModel> = ({
 
   return (
     <div className="w-full flex flex-col">
-      <SearchBar onClick={onSearchClick} onChange={onChange} />
+      <SearchBar searchMp3={searchMp3} searchRef={searchRef} onHandleSubmit={onHandleSubmit} setYoutubeLink={setYoutubeLink} />
       <div
-        className={`bg-black w-full h-[60px] flex flex-col gap-4 p-4 mb-8 ${
-          !searchResult ? "invisible" : ""
+        className={`bg-black w-full h-[60px] my-4 rounded-lg flex flex-col justify-center gap-4 p-4 duration-300 ${
+          !searchResult ? "-translate-y-full invisible" : "translate-y-0 visible"
         }`}
       >
         {searchResult && (

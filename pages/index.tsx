@@ -8,6 +8,9 @@ import ErrorNotification from "@/components/error/ErrorNotification";
 export default function Home() {
   const audioRef = useRef<any>();
   const progressBarRef = useRef<any>();
+  const rangeRef = useRef<any>();
+  const thumbRef = useRef<any>();
+  const searchRef = useRef<any>();
 
   const [togglePlayButton, setTogglePlayButton] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -38,12 +41,12 @@ export default function Home() {
   const [isLooped, setIsLooped] = useState<boolean>(false);
   const [isLoopedOnce, setIsLoopedOnce] = useState<boolean>(false);
 
-  const [error, setError] = useState<string>("")
-  const [isErrorClicked, setIsErrorClicked] = useState<boolean>(false)
+  const [error, setError] = useState<string>("");
+  const [isErrorClicked, setIsErrorClicked] = useState<boolean>(false);
 
-  const rangeRef = useRef<any>();
-  const thumbRef = useRef<any>();
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$/
+  
   const handleMuteClick = () => {
     setVolumeMute((state) => !state);
   };
@@ -84,53 +87,66 @@ export default function Home() {
     }
   };
 
-  const onChangeLinkYoutube = (e: any) => {
-    setYoutubeLink(e.target.value);
-  };
+  const onHandleSubmit = (e: any) => {
+    e.preventDefault();
+    const currentURL = searchRef.current.value
 
-  const searchVideoMp3 = () => {
-    if (youtubeLink){
-      const url = new URL(youtubeLink);
-    console.log(url.searchParams.get("v"));
-    const getVideoInformation = async () => {
-      const fetchApi = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get(
-          "v"
-        )}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
-      );
-
-      fetchApi.json().then((res) => {
-        setSearchResult(res.items[0]);
-      });
-    };
-
-    const getMp3Link = async () => {
-      const fetchApi = await fetch(
-        `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get(
-          "v"
-        )}`,
-        {
-          headers: {
-            "X-RapidAPI-Key":
-              "f67a6ec0ffmsh5fbe2152f4cb7f7p1151adjsnc93ad2e77038",
-            "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com",
-          },
-        }
-      );
-
-      fetchApi.json().then((res) => {
-        setSearchLinkAudio(res.link);
-        console.log(res.link);
-      });
-    };
-    getVideoInformation();
-    getMp3Link();
-    } else{
-      setError("Please fill in search box before searching!")
-      setIsErrorClicked(false)
+    if(!currentURL){
+      setError("Please fill in search box before searching!");
+      setIsErrorClicked(false);
+      setSearchResult(null)
     }
-    
+    else if(!youtubeRegex.test(currentURL)){
+      setError("Invalid URL!");
+      setIsErrorClicked(false);
+      setSearchResult(null)
+    } else{
+      searchMp3(searchRef.current.value);
+    }
   };
+
+  const searchMp3 = (youtubeLink: string) => {
+    const url = new URL(youtubeLink);
+      console.log(url.searchParams.get("v"));
+      const getVideoInformation = async () => {
+        const fetchApi = await fetch(
+          `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get(
+            "v"
+          )}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
+        );
+
+        fetchApi.json().then((res) => {
+          setSearchResult(res.items[0]);
+        }).catch(err => {
+          console.log(err)
+        })
+      };
+
+      const getMp3Link = async () => {
+        const fetchApi = await fetch(
+          `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get(
+            "v"
+          )}`,
+          {
+            headers: {
+              "X-RapidAPI-Key":
+                "f67a6ec0ffmsh5fbe2152f4cb7f7p1151adjsnc93ad2e77038",
+              "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com",
+            },
+          }
+        );
+
+        fetchApi.json().then((res) => {
+          setSearchLinkAudio(res.link);
+          console.log(res.link);
+        }).catch(err => {
+          console.log(err)
+        })
+
+      };
+      getVideoInformation();
+      getMp3Link();
+  }
 
   const playNextSong = () => {
     if (songs.length > 0) {
@@ -149,8 +165,8 @@ export default function Home() {
         }
       }
     }
-    if (isLoopedOnce){
-      setIsLoopedOnce(false)
+    if (isLoopedOnce) {
+      setIsLoopedOnce(false);
     }
   };
 
@@ -174,8 +190,8 @@ export default function Home() {
   };
 
   const onCloseClick = () => {
-    setIsErrorClicked(true)
-  }
+    setIsErrorClicked(true);
+  };
 
   const playAudioFromPlaylist = (song: any) => {
     console.log(songs);
@@ -206,19 +222,19 @@ export default function Home() {
       setCurrentSongPlaylist(song);
     };
     if (isPlaylist && currentSongPlaylist.audioLink === currentAudioLink) {
-        var currentIndex = songs.indexOf(currentSongPlaylist);
-        console.log(currentIndex);
-        if (currentTime >= duration) {
-          if (currentIndex + 1 >= songs.length) {
-            setCurrentIndex(currentIndex + 1);
-            currentIndex = 0;
-            autoPlayNext(songs[currentIndex]);
-          } else {
-            autoPlayNext(songs[currentIndex + 1]);
-            setCurrentSongPlaylist(songs[currentIndex + 1]);
-            setCurrentIndex(currentIndex + 1);
-          }
+      var currentIndex = songs.indexOf(currentSongPlaylist);
+      console.log(currentIndex);
+      if (currentTime >= duration) {
+        if (currentIndex + 1 >= songs.length) {
+          setCurrentIndex(currentIndex + 1);
+          currentIndex = 0;
+          autoPlayNext(songs[currentIndex]);
+        } else {
+          autoPlayNext(songs[currentIndex + 1]);
+          setCurrentSongPlaylist(songs[currentIndex + 1]);
+          setCurrentIndex(currentIndex + 1);
         }
+      }
     }
   }, [
     currentAudioLink,
@@ -238,7 +254,6 @@ export default function Home() {
 
   const handleLoopOnceButton = () => {
     setIsLoopedOnce((state) => !state);
-    // const currentLoopType = isLoopedOnce
     if (isLooped) {
       setIsLooped(false);
     }
@@ -294,9 +309,11 @@ export default function Home() {
   }, [currentTime, duration, isLooped, isLoopedOnce]);
 
   return (
-    <div className="relative h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9]">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full px-20">
+    <div className="h-auto md:h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] md:flex md:justify-center md:items-center">
+      <div className="w-full h-fit px-20">
         <SearchContainer
+          searchMp3={searchMp3}
+          searchRef={searchRef}
           songs={songs}
           setCurrentTime={setCurrentTime}
           setDuration={setDuration}
@@ -309,14 +326,15 @@ export default function Home() {
           handleOnClickPlayButton={() => handleOnClickPlayButton()}
           setSongs={setSongs}
           searchAudioLink={searchAudioLink}
-          onSearchClick={() => searchVideoMp3()}
-          onChange={(e: any) => onChangeLinkYoutube(e)}
+          onHandleSubmit={(e: any) => onHandleSubmit(e)}
+          setError={setError}
+          setYoutubeLink={setYoutubeLink}
           searchResult={searchResult}
           setCurrentAudioLink={setCurrentAudioLink}
           setSongImage={setSongImage}
           setSongTitle={setSongTitle}
         />
-        <div className="flex gap-20 justify-center h-[500px]">
+        <div className="md:flex md:gap-20 md:justify-center h-[500px]">
           <MusicBoxContainer
             isLoopedOnce={isLoopedOnce}
             isLooped={isLooped}
@@ -359,7 +377,12 @@ export default function Home() {
         </div>
       </div>
 
-      <ErrorNotification isErrorClicked={isErrorClicked} onCloseClick={onCloseClick} error={error} className="bg-[#FF6464] max-w-[400px] min-h-[60px] fixed bottom-0 left-0 z-50" />
+      <ErrorNotification
+        isErrorClicked={isErrorClicked}
+        onCloseClick={onCloseClick}
+        error={error}
+        className="bg-[#FF6464] max-w-[400px] min-h-[60px] fixed bottom-0 left-0 z-50"
+      />
     </div>
   );
 }

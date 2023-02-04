@@ -55,20 +55,25 @@ const SearchContainer: React.FC<SearchBarModel> = ({
   };
 
   const onAddSongClick = () => {
-    setSongs((prevSong: any) => [
-      ...prevSong,
-      {
-        searchResult: searchResult,
-        audioLink: searchAudioLink,
-      },
-    ]);
-    
-    var songStorage = [...songs, {
+    const songAdded = {
       searchResult: searchResult,
       audioLink: searchAudioLink,
-    }]
+    }
+    if (songs.filter(song => song.searchResult.id === songAdded.searchResult.id).length > 0){
 
-    localStorage.setItem("songs", JSON.stringify(songStorage))
+      alert("Song has been added already")
+    } else{
+      setSongs((prevSong: any) => [
+        ...prevSong, songAdded
+      ]);
+      
+      var songStorage = [...songs, {
+        searchResult: searchResult,
+        audioLink: searchAudioLink,
+      }]
+  
+      localStorage.setItem("songs", JSON.stringify(songStorage))
+    }
   };
 
   return (

@@ -25,7 +25,7 @@ const PlayList: React.FC<PlayListModel> = ({
         My Playlist
       </Title>
 
-      <div className="flex flex-col gap-8 p-4 overflow-y-scroll my-playlist">
+      <div className="flex flex-col gap-8 p-4 overflow-y-scroll my-playlist h-full rounded-lg">
         {songs.map((song: any, index: number) => {
           return (
             <SongCard

@@ -2,6 +2,7 @@ import MusicBoxContainer from "@/components/audio/MusicBoxContainer";
 import SearchContainer from "@/components/search/SearchContainer";
 import { useEffect, useRef, useState } from "react";
 import PlayList from "@/components/playlist/PlayList";
+import ErrorNotification from "@/components/error/ErrorNotification";
 
 // https://www.youtube.com/watch?v=Ws-QlpSltr8&ab_channel=ĐenVâuOfficial
 export default function Home() {
@@ -36,6 +37,9 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isLooped, setIsLooped] = useState<boolean>(false);
   const [isLoopedOnce, setIsLoopedOnce] = useState<boolean>(false);
+
+  const [error, setError] = useState<string>("")
+  const [isErrorClicked, setIsErrorClicked] = useState<boolean>(false)
 
   const rangeRef = useRef<any>();
   const thumbRef = useRef<any>();
@@ -85,7 +89,8 @@ export default function Home() {
   };
 
   const searchVideoMp3 = () => {
-    const url = new URL(youtubeLink);
+    if (youtubeLink){
+      const url = new URL(youtubeLink);
     console.log(url.searchParams.get("v"));
     const getVideoInformation = async () => {
       const fetchApi = await fetch(
@@ -120,6 +125,11 @@ export default function Home() {
     };
     getVideoInformation();
     getMp3Link();
+    } else{
+      setError("Please fill in search box before searching!")
+      setIsErrorClicked(false)
+    }
+    
   };
 
   const playNextSong = () => {
@@ -163,6 +173,10 @@ export default function Home() {
     }
   };
 
+  const onCloseClick = () => {
+    setIsErrorClicked(true)
+  }
+
   const playAudioFromPlaylist = (song: any) => {
     console.log(songs);
     setCurrentTime(0);
@@ -192,7 +206,6 @@ export default function Home() {
       setCurrentSongPlaylist(song);
     };
     if (isPlaylist && currentSongPlaylist.audioLink === currentAudioLink) {
-      if (isLooped) {
         var currentIndex = songs.indexOf(currentSongPlaylist);
         console.log(currentIndex);
         if (currentTime >= duration) {
@@ -206,14 +219,12 @@ export default function Home() {
             setCurrentIndex(currentIndex + 1);
           }
         }
-      }
     }
   }, [
     currentAudioLink,
     currentSongPlaylist,
     currentTime,
     duration,
-    isLooped,
     isPlaylist,
     songs,
   ]);
@@ -347,6 +358,8 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <ErrorNotification isErrorClicked={isErrorClicked} onCloseClick={onCloseClick} error={error} className="bg-[#FF6464] max-w-[400px] min-h-[60px] fixed bottom-0 left-0 z-50" />
     </div>
   );
 }

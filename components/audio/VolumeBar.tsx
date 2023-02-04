@@ -27,7 +27,7 @@ const VolumeBar: React.FC<VolumeBarModel> = ({volumeLevel, volumeMute, handleMut
         }} 
         className='pointer-events-none absolute top-0 translate-y-2 rounded-[6px] w-full'></div>
         <input 
-          type="range" min="0" max="50" className='w-full volume-bar pointer-events-auto' value={volumeLevel} onChange={e => setVolumeLevel(e.currentTarget.value)} />
+          type="range" min="0" max="50" className='w-full volume-bar pointer-events-auto cursor-pointer' value={volumeLevel} onChange={e => setVolumeLevel(e.currentTarget.value)} />
       </div>
 
       <Button onClick={() => handleMuteClick()}>

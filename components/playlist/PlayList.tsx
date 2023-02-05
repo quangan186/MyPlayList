@@ -34,7 +34,7 @@ const PlayList: React.FC<PlayListModel> = ({
   }
 
   return (
-    <div onDrag={onFlipDown} className={`bg-black w-full h-full ${isFlipped ? "translate-y-full": "translate-y-0"} md:translate-y-0 duration-300  md:rounded-lg md:flex flex-col shadow-lg md:static absolute top-0 left-0 z-50`}>
+    <div onClick={onFlipDown} className={`bg-black w-full h-full ${isFlipped ? "translate-y-full": "translate-y-0"} md:translate-y-0 duration-300  md:rounded-lg md:flex flex-col shadow-lg md:static absolute top-0 left-0 z-50`}>
       <div className="flex items-center border-b border-b-gray-300 p-4 ">
         <Title className="text-white text-[20px] shadow-lg text-xl tracking-wider z-50 w-full">
           My Playlist

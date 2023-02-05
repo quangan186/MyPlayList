@@ -112,7 +112,7 @@ export default function Home() {
       const getVideoInformation = async () => {
         const fetchApi = await fetch(
           `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get(
-            "v" || url.pathname
+            "v" || url.pathname.toString()
           )}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
         );
 
@@ -126,7 +126,7 @@ export default function Home() {
       const getMp3Link = async () => {
         const fetchApi = await fetch(
           `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get(
-            "v" || url.pathname
+            "v" || url.pathname.toString()
           )}`,
           {
             headers: {
@@ -318,7 +318,7 @@ export default function Home() {
 
   return (
     <div className="overflow-hidden relative min-h-screen md:h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] flex justify-center flex-col md:flex-row items-center">
-      <div className="w-full h-fit px-20">
+      <div className="w-full h-fit px-4 md:px-20">
         <SearchContainer
           searchMp3={searchMp3}
           searchRef={searchRef}

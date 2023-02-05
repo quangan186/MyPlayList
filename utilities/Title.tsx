@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface TitleModel{
-    children: string,
+    children?: string,
     className?: string
 }
 

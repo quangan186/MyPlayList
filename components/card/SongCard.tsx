@@ -18,7 +18,7 @@ const SongCard: React.FC<SearchResultModel> = ({
   onDeleteClick
 }) => {
   return (
-    <div className="flex cursor-pointer h-[60px] relative">
+    <div className="flex cursor-pointer h-[60px] relative py-8">
       <div onClick={onClick} className='flex items-center hover:opacity-70 w-full duration-200'>
         <img src={banner} alt="" className="max-w-[60px] max-h-[60px]" />
         <div className="w-full pl-4 pr-10">

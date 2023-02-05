@@ -26,6 +26,8 @@ interface SearchBarModel {
   setError: any
   searchRef: any
   searchMp3: any
+  setSuccess: any
+  setIsNotificationClicked: any
 }
 
 const SearchContainer: React.FC<SearchBarModel> = ({
@@ -46,7 +48,9 @@ const SearchContainer: React.FC<SearchBarModel> = ({
   songs,
   setError,
   searchRef,
-  searchMp3
+  searchMp3,
+  setSuccess,
+  setIsNotificationClicked
 }) => {
   const playAudio = () => {
     setCurrentTime(0);
@@ -67,7 +71,12 @@ const SearchContainer: React.FC<SearchBarModel> = ({
     }
     if (songs.filter(song => song.searchResult.id === songAdded.searchResult.id).length > 0){
       setError("Song has been added already!")
+      setSuccess("")
+      setIsNotificationClicked(false);
     } else{
+      setSuccess("Song has been added successful ^^")
+      setError("")
+      setIsNotificationClicked(false);
       setSongs((prevSong: any) => [
         ...prevSong, songAdded
       ]);
@@ -82,10 +91,10 @@ const SearchContainer: React.FC<SearchBarModel> = ({
   };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <SearchBar searchMp3={searchMp3} searchRef={searchRef} onHandleSubmit={onHandleSubmit} setYoutubeLink={setYoutubeLink} />
       <div
-        className={`bg-black w-full h-[60px] my-4 rounded-lg flex flex-col justify-center gap-4 p-4 duration-300 ${
+        className={`bg-black w-full min-h-[60px] my-4 rounded-lg flex flex-col justify-center gap-4 p-4 duration-300 ${
           !searchResult ? "-translate-y-full invisible" : "translate-y-0 visible"
         }`}
       >

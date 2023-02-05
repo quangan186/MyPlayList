@@ -1,7 +1,7 @@
 import Button from "@/utilities/Button";
 import Title from "@/utilities/Title";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import SongCard from "../card/SongCard";
 import trash from "@/assets/svg/trash.svg"
 
@@ -11,6 +11,9 @@ interface PlayListModel {
   playAudioFromPlaylist: any;
   isFlipped: boolean
   onFlipDown: any
+  setSuccess: any
+  setError: any
+  setIsNotificationClicked: any
 }
 
 const PlayList: React.FC<PlayListModel> = ({
@@ -18,23 +21,32 @@ const PlayList: React.FC<PlayListModel> = ({
   setSongs,
   playAudioFromPlaylist,
   isFlipped,
-  onFlipDown
+  onFlipDown,
+  setSuccess,
+  setError,
+  setIsNotificationClicked
 }) => {
 
   const onDeleteSongClick = (id: string) => {
     const newSongs = songs.filter((song) => id !== song.searchResult.id);
     setSongs(newSongs);
     localStorage.setItem("songs", JSON.stringify(newSongs));
+    setSuccess("Removed successful ^^")
+    setError("")
+    setIsNotificationClicked(false);
   };
 
   const onClearPlaylist = () => {
     if (confirm('Are you sure you want to delete the playlist?')) {   
       localStorage.removeItem("songs");
+      setSuccess("Removed all successful ^^")
+      setError("")
+      setIsNotificationClicked(false);
     }
   }
 
   return (
-    <div onClick={onFlipDown} className={`bg-black w-full h-full ${isFlipped ? "translate-y-full": "translate-y-0"} md:translate-y-0 duration-300  md:rounded-lg md:flex flex-col shadow-lg md:static absolute top-0 left-0 z-50`}>
+    <div onClick={onFlipDown} className={`bg-black w-full h-screen  md:h-full ${isFlipped ? "translate-y-full": "translate-y-0"} md:translate-y-0 duration-300  md:rounded-lg md:flex flex-col shadow-lg md:static fixed top-0 left-0 z-50`}>
       <div className="flex items-center border-b border-b-gray-300 p-4 ">
         <Title className="text-white text-[20px] shadow-lg text-xl tracking-wider z-50 w-full">
           My Playlist
@@ -52,7 +64,7 @@ const PlayList: React.FC<PlayListModel> = ({
       </div>
       
 
-      <div className="flex flex-col gap-8 p-4 overflow-y-scroll my-playlist h-full rounded-lg">
+      <div className="flex flex-col p-4 overflow-y-scroll h-full rounded-lg">
         {songs.map((song: any, index: number) => {
           return (
             <SongCard

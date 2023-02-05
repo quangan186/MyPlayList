@@ -39,7 +39,7 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
       </div>
       
       <div className="flex h-full justify-between items-center gap-4 md:py-4 py-8">
-        <Title className="text-[16px] font-bold">{title}</Title>
+        <Title className="text-[16px] font-bold text-left w-full">{title}</Title>
         <Button className="max-w-[20px] max-h-[20px] md:hidden pointer-events-auto" onClick={onShowPlaylist}>
           <Image src={playlist} alt="" />
         </Button>

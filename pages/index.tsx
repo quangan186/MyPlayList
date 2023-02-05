@@ -2,7 +2,7 @@ import MusicBoxContainer from "@/components/audio/MusicBoxContainer";
 import SearchContainer from "@/components/search/SearchContainer";
 import { useEffect, useRef, useState } from "react";
 import PlayList from "@/components/playlist/PlayList";
-import ErrorNotification from "@/components/error/ErrorNotification";
+import Notification from "@/components/notification/Notification";
 
 // https://www.youtube.com/watch?v=Ws-QlpSltr8&ab_channel=ĐenVâuOfficial
 export default function Home() {
@@ -42,8 +42,9 @@ export default function Home() {
   const [isLoopedOnce, setIsLoopedOnce] = useState<boolean>(false);
 
   const [error, setError] = useState<string>("");
-  const [isErrorClicked, setIsErrorClicked] = useState<boolean>(false);
-  const [isFlipped, setIsFlipped] = useState<boolean>(false)
+  const [success, setSuccess] = useState<string>("");
+  const [isNotificationClicked, setIsNotificationClicked] = useState<boolean>(false);
+  const [isFlipped, setIsFlipped] = useState<boolean>(true)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const youtubeRegex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/
@@ -94,12 +95,14 @@ export default function Home() {
 
     if(!currentURL){
       setError("Please fill in search box before searching!");
-      setIsErrorClicked(false);
+      setSuccess("")
+      setIsNotificationClicked(false);
       setSearchResult(null)
     }
     else if(!youtubeRegex.test(currentURL)){
       setError("Invalid URL!");
-      setIsErrorClicked(false);
+      setSuccess("")
+      setIsNotificationClicked(false);
       setSearchResult(null)
     } else{
       searchMp3(searchRef.current.value);
@@ -189,7 +192,7 @@ export default function Home() {
   };
 
   const onCloseClick = () => {
-    setIsErrorClicked(true);
+    setIsNotificationClicked(true);
   };
 
   const onFlipDown = () => {
@@ -315,9 +318,10 @@ export default function Home() {
   }, [currentTime, duration, isLooped, isLoopedOnce]);
 
   return (
-    <div className="overflow-hidden relative min-h-screen md:h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] flex justify-center flex-col md:flex-row items-center">
-      <div className="w-full h-fit px-4 md:px-20">
+    <div className="overflow-hidden relative min-h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] flex justify-center flex-col md:flex-row items-center">
+      <div className="w-full px-4 sm:px-20">
         <SearchContainer
+          setIsNotificationClicked={setIsNotificationClicked}
           searchMp3={searchMp3}
           searchRef={searchRef}
           songs={songs}
@@ -334,13 +338,14 @@ export default function Home() {
           searchAudioLink={searchAudioLink}
           onHandleSubmit={(e: any) => onHandleSubmit(e)}
           setError={setError}
+          setSuccess={setSuccess}
           setYoutubeLink={setYoutubeLink}
           searchResult={searchResult}
           setCurrentAudioLink={setCurrentAudioLink}
           setSongImage={setSongImage}
           setSongTitle={setSongTitle}
         />
-        <div className="md:flex md:gap-20 md:justify-center h-[500px]">
+        <div className="md:flex md:gap-20 md:justify-center max-h-[500px] md:h-[500px]">
           <MusicBoxContainer
             onShowPlaylist={() => setIsFlipped(false)}
             isLoopedOnce={isLoopedOnce}
@@ -377,6 +382,9 @@ export default function Home() {
             setCurrentTime={setCurrentTime}
           />
           <PlayList
+            setIsNotificationClicked={setIsNotificationClicked}
+            setSuccess={setSuccess}
+            setError={setError}
             isFlipped={isFlipped}
             onFlipDown={onFlipDown}
             songs={songs}
@@ -386,11 +394,12 @@ export default function Home() {
         </div>
       </div>
 
-      <ErrorNotification
-        isErrorClicked={isErrorClicked}
+      <Notification
+        isNotificationClicked={isNotificationClicked}
         onCloseClick={onCloseClick}
         error={error}
-        className="bg-[#FF6464] max-w-[400px] min-h-[60px] fixed bottom-0 left-0 z-50"
+        success={success}
+        className={`${error ? "bg-[#FF6464]" : success ? "bg-[#50D890]" : ""}  max-w-[400px] min-h-[60px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50`}
       />
     </div>
   );

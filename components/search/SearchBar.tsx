@@ -11,7 +11,7 @@ interface SearchBarModel{
 const SearchBar: React.FC<SearchBarModel> = ({searchMp3, searchRef, onHandleSubmit}) => {
   return (
     <form onSubmit={onHandleSubmit} className='flex w-full relative items-center rounded-lg z-50'>
-        <input ref={searchRef} type='text' className='relative w-full px-6 py-4 border-none outline-none bg-transparent rounded-lg bg-white' placeholder='Copy and paste the Youtube link here' onKeyDown={(e) => {
+        <input ref={searchRef} type='text' className='relative w-full px-6 pr-16 py-4 border-none outline-none bg-transparent rounded-lg bg-white' placeholder='Copy and paste the Youtube link here' onKeyDown={(e) => {
           if (e.key === "Enter"){
             searchMp3(e.currentTarget.value)
           }

@@ -14,7 +14,7 @@ interface VolumeBarModel{
 }
 const VolumeBar: React.FC<VolumeBarModel> = ({volumeLevel, volumeMute, handleMuteClick, setVolumeLevel}) => {
   return (
-    <div className='inline-flex w-full justify-end gap-4 pt-2'>
+    <div className='md:inline-flex w-full justify-end gap-4 pt-2 hidden'>
       <Button onClick={() => handleMuteClick()}>
         <Image src={volumeMute ? mute : lowVolume} alt="" className='w-[20px] h-[20px]'/>  
       </Button>

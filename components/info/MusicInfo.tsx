@@ -2,12 +2,15 @@ import Title from "@/utilities/Title";
 import Image from "next/image";
 import React from "react";
 import defaultImg from "@/assets/img/defaultMusic.jpeg";
+import Button from "@/utilities/Button";
+import playlist from "@/assets/svg/playlist.svg"
 
 interface MusicInfoModel {
   className?: string;
   banner: string;
   title: string;
   togglePlayButton: boolean
+  onShowPlaylist: any
 }
 
 const MusicInfo: React.FC<MusicInfoModel> = ({
@@ -15,6 +18,7 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
   className,
   banner,
   title,
+  onShowPlaylist
 }) => {
   return (
     <div className={`${className} w-full h-full flex flex-col`}>
@@ -23,18 +27,23 @@ const MusicInfo: React.FC<MusicInfoModel> = ({
           <img
             src={banner}
             alt=""
-            className={`mx-auto w-[200px] h-[200px] md:w-[260px] md:h-[260px] rounded-full ${togglePlayButton ? "animate-spin-slow" : ""}`}
+            className={`mx-auto sm:w-[260px] sm:h-[260px] w-[200px] h-[200px] object-cover rounded-full ${togglePlayButton ? "animate-spin-slow" : ""}`}
           />
         ) : (
           <Image
             src={defaultImg}
             alt=""
-            className="mx-auto md:w-[260px] md:h-[260px] rounded-full"
+            className="mx-auto sm:w-[260px] sm:h-[260px] w-[200px] h-[200px] object-cover rounded-full"
           />
         )}
       </div>
       
-      <Title className="text-[16px] py-4 font-bold h-full flex items-center">{title}</Title>
+      <div className="flex h-full justify-between items-center gap-4 md:py-4 py-8">
+        <Title className="text-[16px] font-bold">{title}</Title>
+        <Button className="max-w-[20px] max-h-[20px] md:hidden pointer-events-auto" onClick={onShowPlaylist}>
+          <Image src={playlist} alt="" />
+        </Button>
+      </div>
     </div>
   );
 };

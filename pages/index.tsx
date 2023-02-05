@@ -43,6 +43,7 @@ export default function Home() {
 
   const [error, setError] = useState<string>("");
   const [isErrorClicked, setIsErrorClicked] = useState<boolean>(false);
+  const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$/
@@ -111,7 +112,7 @@ export default function Home() {
       const getVideoInformation = async () => {
         const fetchApi = await fetch(
           `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get(
-            "v"
+            "v" || url.pathname
           )}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
         );
 
@@ -125,7 +126,7 @@ export default function Home() {
       const getMp3Link = async () => {
         const fetchApi = await fetch(
           `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get(
-            "v"
+            "v" || url.pathname
           )}`,
           {
             headers: {
@@ -193,6 +194,9 @@ export default function Home() {
     setIsErrorClicked(true);
   };
 
+  const onFlipDown = () => {
+    setIsFlipped(true)
+  }
   const playAudioFromPlaylist = (song: any) => {
     console.log(songs);
     setCurrentTime(0);
@@ -211,7 +215,6 @@ export default function Home() {
   useEffect(() => {
     const autoPlayNext = (song: any) => {
       setCurrentTime(0);
-      setDuration(NaN);
       setPosition(0);
       setMarginLeft(0);
       setProgressBarWidth(0);
@@ -224,26 +227,31 @@ export default function Home() {
     if (isPlaylist && currentSongPlaylist.audioLink === currentAudioLink) {
       var currentIndex = songs.indexOf(currentSongPlaylist);
       console.log(currentIndex);
-      if (currentTime >= duration) {
-        if (currentIndex + 1 >= songs.length) {
-          setCurrentIndex(currentIndex + 1);
-          currentIndex = 0;
-          autoPlayNext(songs[currentIndex]);
-        } else {
-          autoPlayNext(songs[currentIndex + 1]);
-          setCurrentSongPlaylist(songs[currentIndex + 1]);
-          setCurrentIndex(currentIndex + 1);
+      if (isLooped || (!isLooped && !isLoopedOnce)){
+        if (currentTime >= duration) {
+          if (currentIndex + 1 >= songs.length) {
+            setCurrentIndex(currentIndex + 1);
+            currentIndex = 0;
+            autoPlayNext(songs[currentIndex]);
+          } else {
+            autoPlayNext(songs[currentIndex + 1]);
+            setCurrentSongPlaylist(songs[currentIndex + 1]);
+            setCurrentIndex(currentIndex + 1);
+          }
         }
-      }
+      } else{
+        if (currentTime >= duration) {
+          autoPlayNext(songs[currentIndex])
+          setCurrentSongPlaylist(songs[currentIndex]);
+          setCurrentIndex(currentIndex);
+        }
+      } 
+    }else{
+      if(isLooped && currentTime > duration){
+        audioRef.current.play()
+      } 
     }
-  }, [
-    currentAudioLink,
-    currentSongPlaylist,
-    currentTime,
-    duration,
-    isPlaylist,
-    songs,
-  ]);
+  }, [currentAudioLink, currentSongPlaylist, currentTime, duration, isLooped, isLoopedOnce, isPlaylist, songs]);
 
   const handleLoopButton = () => {
     setIsLooped((state) => !state);
@@ -309,7 +317,7 @@ export default function Home() {
   }, [currentTime, duration, isLooped, isLoopedOnce]);
 
   return (
-    <div className="h-auto md:h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] md:flex md:justify-center md:items-center">
+    <div className="overflow-hidden relative min-h-screen md:h-screen w-full bg-gradient-to-r from-[#2C69D1] to-[#0ABCF9] flex justify-center flex-col md:flex-row items-center">
       <div className="w-full h-fit px-20">
         <SearchContainer
           searchMp3={searchMp3}
@@ -336,6 +344,7 @@ export default function Home() {
         />
         <div className="md:flex md:gap-20 md:justify-center h-[500px]">
           <MusicBoxContainer
+            onShowPlaylist={() => setIsFlipped(false)}
             isLoopedOnce={isLoopedOnce}
             isLooped={isLooped}
             handleLoopOnceButton={handleLoopOnceButton}
@@ -370,6 +379,8 @@ export default function Home() {
             setCurrentTime={setCurrentTime}
           />
           <PlayList
+            isFlipped={isFlipped}
+            onFlipDown={onFlipDown}
             songs={songs}
             setSongs={setSongs}
             playAudioFromPlaylist={playAudioFromPlaylist}

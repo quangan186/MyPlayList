@@ -41,7 +41,7 @@ interface MusicBoxModel{
 }
 const MusicBoxContainer:React.FC<MusicBoxModel> = ({onShowPlaylist, isLoopedOnce, handleLoopOnceButton, isLooped, loopFunc, prevFunc, nextFunc, volumeLevel, setVolumeLevel, volumeMute, handleMuteClick, rangeRef, thumbRef, setPosition, setMarginLeft, setProgressBarWidth, position, progressBarWidth, marginLeft, getCurrentDuration, percentage, start, end, setDuration, togglePlayButton, onChange, handleOnClickPlayButton, audioRef,audioLink, title, songBanner}) => {
   return (
-    <div className={`w-full h-full border border-gray-300 rounded-lg shadow-lg px-12 py-4 relative flex flex-col ${audioLink ? "" : "pointer-events-none opacity-70"}`}>
+    <div className={`w-full h-full border border-gray-300 rounded-lg shadow-lg p-4 relative flex flex-col ${audioLink ? "" : "pointer-events-none opacity-70"}`}>
       <audio ref={audioRef} loop={isLoopedOnce}  src={audioLink} preload="metadata" onLoadedData={(e) => setDuration(Math.floor(e.currentTarget.duration))} onTimeUpdate={getCurrentDuration} muted={volumeMute} ></audio>
       <MusicInfo onShowPlaylist={onShowPlaylist} togglePlayButton={togglePlayButton} className='h-full' banner={songBanner} title={title} />
       <AudioRange rangeRef={rangeRef} thumbRef={thumbRef} setPosition={setPosition} setMarginLeft={setMarginLeft} setProgressBarWidth={setProgressBarWidth} position={position} progressBarWidth={progressBarWidth} marginLeft={marginLeft} percentage={percentage} onChange={onChange} start={start} end={end} className='py-2' />

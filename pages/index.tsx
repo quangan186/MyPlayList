@@ -345,7 +345,7 @@ export default function Home() {
           setSongImage={setSongImage}
           setSongTitle={setSongTitle}
         />
-        <div className="md:flex md:gap-20 md:justify-center max-h-[500px] md:h-[500px]">
+        <div className="md:flex md:gap-20 md:justify-center h-[460px] md:h-[500px]">
           <MusicBoxContainer
             onShowPlaylist={() => setIsFlipped(false)}
             isLoopedOnce={isLoopedOnce}

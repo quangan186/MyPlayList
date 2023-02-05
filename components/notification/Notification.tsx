@@ -14,7 +14,7 @@ interface NotificationModel{
 
 const Notification: React.FC<NotificationModel> = ({isNotificationClicked, onCloseClick, error, success, className}) => {
   return (
-    <div className={`${className} ${(error && !isNotificationClicked) || (success && !isNotificationClicked) ? "-translate-y-2" : 'translate-y-full'} left-0 duration-300 flex gap-2 items-center px-4 py-2 text-white rounded-lg`}>
+    <div className={`${className} ${(error && !isNotificationClicked) || (success && !isNotificationClicked) ? "-translate-y-2" : 'translate-y-full'} duration-300 flex gap-2 items-center px-4 py-2 text-white rounded-lg`}>
       <Title className='font-bold'>
         {error || success}
       </Title>

@@ -74,7 +74,7 @@ const SearchContainer: React.FC<SearchBarModel> = ({
       setSuccess("")
       setIsNotificationClicked(false);
     } else{
-      setSuccess("Song has been added successful ^^")
+      setSuccess("Added successful ^^")
       setError("")
       setIsNotificationClicked(false);
       setSongs((prevSong: any) => [

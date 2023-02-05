@@ -399,7 +399,7 @@ export default function Home() {
         onCloseClick={onCloseClick}
         error={error}
         success={success}
-        className={`${error ? "bg-[#FF6464]" : success ? "bg-[#50D890]" : ""}  max-w-[400px] min-h-[60px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50`}
+        className={`${error ? "bg-[#FF6464]" : success ? "bg-[#50D890]" : ""} max-w-[400px] w-fit min-h-[60px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50`}
       />
     </div>
   );

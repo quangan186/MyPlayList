@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import SongCard from "../card/SongCard";
 import trash from "@/assets/svg/trash.svg"
+import Text from "@/utilities/Text";
 
 interface PlayListModel {
   songs: any[];
@@ -64,7 +65,7 @@ const PlayList: React.FC<PlayListModel> = ({
       </div>
       
 
-      <div className="flex flex-col p-4 overflow-y-scroll h-full rounded-lg">
+      <div className="flex flex-col p-4 max-h-[600px] h-full overflow-y-scroll border-b border-b-gray-300">
         {songs.map((song: any, index: number) => {
           return (
             <SongCard
@@ -76,6 +77,12 @@ const PlayList: React.FC<PlayListModel> = ({
             />
           );
         })}
+      </div>
+
+      <div className="flex items-center md:hidden">
+        <Text className="text-white p-4 mt-2">
+          * For the one who bring confidence and motivation for me to work
+        </Text>
       </div>
     </div>
   );

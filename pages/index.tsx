@@ -46,7 +46,7 @@ export default function Home() {
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$/
+  const youtubeRegex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/
   
   const handleMuteClick = () => {
     setVolumeMute((state) => !state);
@@ -108,12 +108,12 @@ export default function Home() {
 
   const searchMp3 = (youtubeLink: string) => {
     const url = new URL(youtubeLink);
+      console.log(url.pathname.slice(1));
       console.log(url.searchParams.get("v"));
+
       const getVideoInformation = async () => {
         const fetchApi = await fetch(
-          `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get(
-            "v" || url.pathname.toString()
-          )}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
+          `https://www.googleapis.com/youtube/v3/videos?id=${url.searchParams.get("v") || url.pathname.slice(1)}&key=AIzaSyCy53gb1X9v_9HqEe1tyWeIYU0Y7mx8ioI&part=snippet`
         );
 
         fetchApi.json().then((res) => {
@@ -125,9 +125,7 @@ export default function Home() {
 
       const getMp3Link = async () => {
         const fetchApi = await fetch(
-          `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get(
-            "v" || url.pathname.toString()
-          )}`,
+          `https://youtube-mp36.p.rapidapi.com/dl?id=${url.searchParams.get("v") || url.pathname.slice(1)}`,
           {
             headers: {
               "X-RapidAPI-Key":
